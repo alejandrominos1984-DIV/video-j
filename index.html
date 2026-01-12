@@ -15,81 +15,46 @@
             --plyr-color-main: var(--brand-blue);
         }
 
-        /* --- ESTILOS PARA MÓVIL --- */
-        @media (min-width: 768px) {
-            /* Ocultar en pantallas grandes */
-            body, .hero-video-section, .video-box, .content-container {
-                display: none !important;
-            }
-            
-            .mobile-message {
-                display: block !important;
-            }
-        }
-
-        @media (max-width: 767px) {
-            /* Mostrar solo en móviles */
-            .mobile-message {
-                display: none !important;
-            }
-        }
-
-        .mobile-message {
-            display: none;
-            width: 100%;
-            height: 100vh;
-            background: #000;
-            color: white;
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .mobile-message h1 {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            color: var(--brand-blue);
-        }
-
-        .mobile-message p {
-            font-size: 1rem;
-            max-width: 300px;
-            line-height: 1.5;
-            color: #CBD5E0;
-        }
-
         body { 
             margin: 0; 
             padding: 0; 
-            background: #000000; /* Fondo negro para móvil */
+            background: #000000; /* Fondo negro siempre */
             font-family: 'Inter', sans-serif; 
             color: white; 
             overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            width: 100%;
         }
 
-        /* --- VIDEO HERO PARA MÓVIL --- */
+        /* --- CONTENEDOR PRINCIPAL RESPONSIVE --- */
+        .mobile-container {
+            width: 100%;
+            max-width: 360px; /* Ancho fijo como móvil */
+            margin: 0 auto;
+            background: #000;
+            box-shadow: 0 0 60px rgba(0, 102, 255, 0.2);
+            position: relative;
+        }
+
+        /* --- VIDEO HERO --- */
         .hero-video-section { 
             width: 100%; 
-            max-width: 100vw;
             background: #000; 
             position: relative;
-            height: 100vh; /* Ocupa toda la pantalla del móvil */
-            overflow: hidden;
         }
         
         .video-box { 
             position: relative; 
             width: 100%; 
-            height: 100vh; /* Altura completa del viewport */
             overflow: hidden; 
             line-height: 0; 
             z-index: 0; 
             -webkit-tap-highlight-color: transparent; 
             touch-action: manipulation; 
+            aspect-ratio: 16/9; /* Relación horizontal */
         }
 
         /* --- FEEDBACK VISUAL --- */
@@ -105,80 +70,80 @@
         .tap-feedback.animate { opacity: 1; }
         .tap-feedback.animate .tap-icon { transform: scale(1.1); }
 
-        /* --- BOTÓN INICIO PARA MÓVIL --- */
+        /* --- BOTÓN INICIO --- */
         .start-screen-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7); /* Fondo más oscuro para móvil */
+            background: rgba(0, 0, 0, 0.5);
             display: flex; align-items: center; justify-content: center;
             z-index: 20; cursor: pointer; transition: opacity 0.5s ease, visibility 0.5s;
         }
         .start-screen-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
         
         .big-play-btn { 
-            width: 100px; /* Más pequeño para móvil */
-            height: 50px; /* Más pequeño para móvil */
+            width: 80px; /* Más pequeño para relación horizontal */
+            height: 40px; /* Más pequeño para relación horizontal */
             background: var(--brand-blue); 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             box-shadow: 0 8px 25px rgba(0, 102, 255, 0.5);
-            border-radius: 12px; /* Esquinas redondeadas */
+            border-radius: 8px; /* Esquinas redondeadas */
             border: none;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         
         .big-play-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 15px 35px rgba(0, 102, 255, 0.5);
+            box-shadow: 0 12px 30px rgba(0, 102, 255, 0.6);
         }
         
         .big-play-btn svg {
-            width: 24px; /* Más pequeño para móvil */
-            height: 24px; /* Más pequeño para móvil */
+            width: 20px;
+            height: 20px;
             fill: white;
         }
 
-        /* --- BANNER DE RECURSOS PARA MÓVIL --- */
+        /* --- BANNER DE RECURSOS --- */
         .premium-banner {
-            position: absolute; bottom: 20px; right: 15px;
+            position: absolute; bottom: 12px; right: 12px;
             background: var(--brand-blue);
             color: #ffffff;
-            padding: 10px 16px; /* Padding más pequeño para móvil */
-            display: flex; align-items: center; gap: 8px;
-            text-decoration: none; z-index: 15; border-radius: 6px; 
+            padding: 8px 16px;
+            display: flex; align-items: center; gap: 6px;
+            text-decoration: none; z-index: 15; border-radius: 4px; 
             opacity: 1; transition: opacity 0.6s ease;
-            box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
-            font-weight: 800; font-size: 0.7rem; /* Tamaño de fuente más pequeño */
+            box-shadow: 0 4px 12px rgba(0, 102, 255, 0.4);
+            font-weight: 800; font-size: 0.7rem;
         }
         .premium-banner.force-hide { opacity: 0; pointer-events: none; }
 
-        /* --- CONTROLES SIMPLIFICADOS PARA MÓVIL --- */
+        /* --- CONTROLES SIMPLIFICADOS --- */
         .plyr__controls { 
             background: linear-gradient(transparent, rgba(0,0,0,0.9)) !important; 
-            padding: 8px 12px !important; /* Padding más pequeño */
-            min-height: 45px !important; /* Altura más pequeña */
+            padding: 8px 12px !important; 
+            min-height: 40px !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
         }
         
-        /* Ocultamos completamente la barra de progreso */
+        /* Ocultar barra de progreso */
         .plyr__progress {
             display: none !important;
         }
         
-        /* Duración centrada para móvil */
+        /* Duración centrada */
         .plyr__time--duration {
             display: block !important; 
             visibility: visible !important;
-            font-size: 0.7rem !important; /* Tamaño más pequeño */
+            font-size: 0.7rem !important; 
             font-weight: 700 !important;
             color: #ffffff !important;
             margin: 0 !important;
             text-align: center;
         }
         
-        /* Ocultamos el tiempo actual */
+        /* Ocultar tiempo actual */
         .plyr__time--current { 
             display: none !important; 
         }
@@ -193,40 +158,38 @@
             display: none !important;
         }
 
-        /* --- INDICADOR DE BUCLE PARA MÓVIL --- */
+        /* --- INDICADOR DE BUCLE --- */
         .loop-indicator {
             position: absolute;
-            top: 15px;
-            left: 15px;
+            top: 10px;
+            left: 10px;
             background: rgba(0, 0, 0, 0.7);
             color: var(--brand-blue);
-            padding: 6px 10px; /* Padding más pequeño */
-            border-radius: 20px;
-            font-size: 0.65rem; /* Tamaño más pequeño */
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.65rem;
             font-weight: 700;
             z-index: 10;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             pointer-events: none;
         }
         
         .loop-indicator svg {
-            width: 12px; /* Más pequeño */
-            height: 12px; /* Más pequeño */
+            width: 12px;
+            height: 12px;
             fill: var(--brand-blue);
         }
 
-        /* --- CONTENIDO PARA MÓVIL --- */
+        /* --- CONTENIDO --- */
         .content-container { 
-            max-width: 100%; 
-            margin: 0 auto; 
-            padding: 20px 15px; /* Padding más pequeño */
-            background: #000; /* Fondo negro para móvil */
+            padding: 20px 15px; 
+            background: #000;
             color: white;
         }
         .lesson-title { 
-            font-size: 1.4rem; /* Tamaño más pequeño para móvil */
+            font-size: 1.2rem; 
             font-weight: 800; 
             margin-bottom: 10px; 
             color: white;
@@ -235,24 +198,44 @@
             display: inline-block; 
             background: var(--brand-blue); 
             color: white; 
-            padding: 14px 28px; /* Padding más pequeño */
-            border-radius: 10px; 
+            padding: 12px 24px; 
+            border-radius: 8px; 
             font-weight: 700; 
             text-decoration: none; 
-            margin-top: 20px; 
-            font-size: 0.9rem; /* Tamaño más pequeño */
-            width: 100%; /* Ancho completo en móvil */
+            margin-top: 15px; 
+            font-size: 0.85rem;
+            width: 100%;
             text-align: center;
+            box-sizing: border-box;
         }
 
-        /* --- ESTILOS DEL REPRODUCTOR PARA MÓVIL --- */
+        /* --- RESPONSIVE ADAPTACIONES --- */
+        @media (max-width: 480px) {
+            .mobile-container {
+                max-width: 100%;
+                box-shadow: none;
+            }
+            
+            .video-box {
+                aspect-ratio: 16/9;
+            }
+        }
+
+        @media (min-width: 481px) {
+            .mobile-container {
+                margin: 20px auto;
+                border-radius: 0;
+            }
+        }
+
+        /* --- ESTILOS DEL REPRODUCTOR --- */
         .plyr__video-wrapper {
             width: 100%;
-            height: 100vh !important; /* Altura completa del viewport */
+            height: 100%;
         }
         
         .plyr--video {
-            height: 100vh !important; /* Altura completa del viewport */
+            height: 100%;
         }
         
         .plyr__poster {
@@ -262,51 +245,44 @@
 </head>
 <body>
 
-    <!-- Mensaje para pantallas grandes -->
-    <div class="mobile-message">
-        <h1>📱 Divélun Academy</h1>
-        <p>Este contenido está optimizado para dispositivos móviles. Por favor, accede desde un teléfono celular para ver la lección.</p>
-        <p style="margin-top: 20px; font-size: 0.9rem; color: #718096;">
-            Si estás en un dispositivo móvil y ves este mensaje, actualiza la página.
-        </p>
-    </div>
+    <!-- Contenedor principal siempre en modo móvil -->
+    <div class="mobile-container">
+        <div class="hero-video-section">
+            <div class="video-box" id="videoWrapper">
 
-    <!-- Contenido para móviles -->
-    <div class="hero-video-section">
-        <div class="video-box" id="videoWrapper">
-
-            <!-- Indicador de bucle de 5 segundos -->
-            <div class="loop-indicator" id="loopIndicator">
-                <svg viewBox="0 0 24 24">
-                    <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
-                </svg>
-                <span>BUCLE: 5 SEGUNDOS</span>
-            </div>
-
-            <div class="tap-feedback left" id="feedbackLeft"><div class="tap-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="white"><path d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/></svg></div></div>
-            <div class="tap-feedback right" id="feedbackRight"><div class="tap-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="white"><path d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg></div></div>
-
-            <div class="start-screen-overlay" id="startScreen">
-                <div class="big-play-btn">
+                <!-- Indicador de bucle de 5 segundos -->
+                <div class="loop-indicator" id="loopIndicator">
                     <svg viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
+                        <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
                     </svg>
+                    <span>BUCLE: 5 SEGUNDOS</span>
                 </div>
+
+                <div class="tap-feedback left" id="feedbackLeft"><div class="tap-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/></svg></div></div>
+                <div class="tap-feedback right" id="feedbackRight"><div class="tap-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg></div></div>
+
+                <div class="start-screen-overlay" id="startScreen">
+                    <div class="big-play-btn">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <a href="material-japones.pdf" download class="premium-banner" id="bannerMaterial">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    <span>RECURSOS PDF</span>
+                </a>
+                
+                <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="VKbvx2QU6jw"></div>
             </div>
-
-            <a href="material-japones.pdf" download class="premium-banner" id="bannerMaterial">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                <span>RECURSOS PDF</span>
-            </a>
-            
-            <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="VKbvx2QU6jw"></div>
         </div>
-    </div>
 
-    <div class="content-container">
-        <h1 class="lesson-title">Lección 1: Yo soy / No soy</h1>
-        <p style="line-height: 1.7; color: #CBD5E0;">Domina la gramática básica del japonés. Usa el doble toque lateral para repasar fragmentos. <strong style="color: var(--brand-blue);">Modo bucle activado: se repite un segmento de 5 segundos.</strong></p>
-        <a href="#" class="next-lesson-btn">Siguiente Lección →</a>
+        <div class="content-container">
+            <h1 class="lesson-title">Lección 1: Yo soy / No soy</h1>
+            <p style="line-height: 1.6; color: #CBD5E0; font-size: 0.9rem;">Domina la gramática básica del japonés. Usa el doble toque lateral para repasar fragmentos. <strong style="color: var(--brand-blue);">Modo bucle activado: se repite un segmento de 5 segundos.</strong></p>
+            <a href="#" class="next-lesson-btn">Siguiente Lección →</a>
+        </div>
     </div>
 
     <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
@@ -314,10 +290,10 @@
         // Inicializar el reproductor
         const player = new Plyr('#player', {
             controls: ['play', 'duration'],
-            fullscreen: { enabled: true }, // Habilitar pantalla completa en móvil
+            fullscreen: { enabled: true },
             autoplay: false,
             muted: false,
-            ratio: '16:9',
+            ratio: '16:9', // Relación horizontal
             youtube: { 
                 noCookie: true, 
                 rel: 0, 
@@ -471,18 +447,6 @@
                 player.currentTime = loopStart;
             }
         });
-
-        // Detectar si es móvil y ajustar comportamientos
-        function isMobile() {
-            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 767;
-        }
-
-        // Si no es móvil, mostrar mensaje
-        if (!isMobile()) {
-            document.querySelector('.hero-video-section').style.display = 'none';
-            document.querySelector('.content-container').style.display = 'none';
-            document.querySelector('.mobile-message').style.display = 'flex';
-        }
     </script>
 </body>
 </html>
