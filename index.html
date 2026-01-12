@@ -36,7 +36,7 @@
             
             .content-wrapper {
                 width: 100%;
-                max-width: 360px; /* Ancho fijo como móvil en desktop */
+                max-width: 360px;
                 background: #000;
                 box-shadow: 0 0 60px rgba(0, 102, 255, 0.2);
             }
@@ -68,7 +68,7 @@
             z-index: 0; 
             -webkit-tap-highlight-color: transparent; 
             touch-action: manipulation; 
-            aspect-ratio: 16/9; /* Relación horizontal */
+            aspect-ratio: 16/9;
         }
 
         /* --- FEEDBACK VISUAL --- */
@@ -87,13 +87,17 @@
         /* --- BOTÓN INICIO --- */
         .start-screen-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.7);
             display: flex; align-items: center; justify-content: center;
-            z-index: 20; cursor: pointer; transition: opacity 0.5s ease, visibility 0.5s;
+            z-index: 20; cursor: pointer; transition: opacity 0.3s ease, visibility 0.3s;
         }
-        .start-screen-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
         
-        /* Botón de reproducción optimizado para móvil */
+        .start-screen-overlay.hidden { 
+            opacity: 0; 
+            visibility: hidden; 
+            pointer-events: none; 
+        }
+        
         .big-play-btn { 
             width: 80px; 
             height: 50px; 
@@ -142,12 +146,10 @@
             justify-content: center !important;
         }
         
-        /* Ocultar barra de progreso */
         .plyr__progress {
             display: none !important;
         }
         
-        /* Duración centrada */
         .plyr__time--duration {
             display: block !important; 
             visibility: visible !important;
@@ -158,17 +160,14 @@
             text-align: center;
         }
         
-        /* Ocultar tiempo actual */
         .plyr__time--current { 
             display: none !important; 
         }
         
-        /* Botón de play de Plyr oculto */
         .plyr__control--play {
             display: none !important;
         }
         
-        /* Ocultar cualquier otro control */
         .plyr__controls__item:not(.plyr__time--duration) {
             display: none !important;
         }
@@ -339,7 +338,7 @@
             fullscreen: { enabled: true },
             autoplay: false,
             muted: false,
-            ratio: '16:9', // Relación horizontal
+            ratio: '16:9',
             youtube: { 
                 noCookie: true, 
                 rel: 0, 
@@ -364,32 +363,59 @@
         
         // Esperar a que el reproductor esté listo
         player.on('ready', () => {
+            console.log('Reproductor listo');
             if (isLooping) {
                 player.currentTime = loopStart;
             }
         });
 
+        // Función para manejar la reproducción
+        const handlePlay = () => {
+            console.log('Reproduciendo - ocultando botón');
+            startScreen.classList.add('hidden');
+            hasStarted = true;
+        };
+
         // Manejar clic en el botón de reproducción
         startScreen.addEventListener('click', (e) => {
             e.stopPropagation();
+            console.log('Clic en botón de reproducción');
+            
+            // Ocultar inmediatamente el botón para dar feedback visual
+            startScreen.classList.add('hidden');
             
             player.play().then(() => {
-                startScreen.classList.add('hidden');
+                console.log('Reproducción exitosa');
                 hasStarted = true;
                 
                 if (isLooping && player.currentTime < loopStart) {
                     player.currentTime = loopStart;
                 }
             }).catch(error => {
+                console.error('Error al reproducir:', error);
+                // Si falla, mostrar el botón de nuevo
+                startScreen.classList.remove('hidden');
+                
                 player.muted = true;
                 player.play().then(() => {
-                    startScreen.classList.add('hidden');
+                    console.log('Reproducción con muted exitosa');
                     hasStarted = true;
                     setTimeout(() => {
                         player.muted = false;
                     }, 1000);
+                }).catch(err => {
+                    console.error('Error incluso con muted:', err);
+                    startScreen.classList.remove('hidden');
                 });
             });
+        });
+
+        // Escuchar eventos de estado del reproductor
+        player.on('playing', handlePlay);
+        
+        player.on('play', () => {
+            console.log('Evento play disparado');
+            handlePlay();
         });
 
         // Controlar el bucle durante la reproducción
@@ -407,9 +433,16 @@
 
         // Manejar cuando el video se pausa
         player.on('pause', () => {
+            console.log('Video pausado');
             if (hasStarted && player.paused) {
                 startScreen.classList.remove('hidden');
             }
+        });
+
+        // Manejar cuando el video termina
+        player.on('ended', () => {
+            console.log('Video terminado');
+            startScreen.classList.remove('hidden');
         });
 
         // Controlar visibilidad del banner
@@ -452,7 +485,8 @@
         };
 
         const showFeedback = (el) => {
-            el.classList.remove('animate'); void el.offsetWidth;
+            el.classList.remove('animate'); 
+            void el.offsetWidth;
             el.classList.add('animate');
             setTimeout(() => el.classList.remove('animate'), 500);
         };
@@ -489,10 +523,20 @@
         
         // Asegurarnos de que el video comience en el tiempo correcto
         player.on('canplay', () => {
+            console.log('Video listo para reproducir');
             if (isLooping) {
                 player.currentTime = loopStart;
             }
         });
+
+        // Forzar la ocultación del botón si el video ya está reproduciéndose
+        setTimeout(() => {
+            if (player.playing && !startScreen.classList.contains('hidden')) {
+                console.log('Video ya reproduciéndose, ocultando botón');
+                startScreen.classList.add('hidden');
+                hasStarted = true;
+            }
+        }, 1000);
     </script>
 </body>
 </html>
