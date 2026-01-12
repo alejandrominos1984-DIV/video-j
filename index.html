@@ -122,7 +122,38 @@
             fill: white;
         }
 
-        /* --- BANNER DE RECURSOS (MÁS PEQUEÑO Y SIEMPRE VISIBLE) --- */
+        /* --- BOTÓN DE PAUSA (AZUL RECTANGULAR) --- */
+        .pause-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 18; pointer-events: none; opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .pause-overlay.visible { 
+            opacity: 1; 
+        }
+        
+        .pause-btn { 
+            width: 70px; 
+            height: 50px; 
+            background: var(--brand-blue); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            box-shadow: 0 8px 25px rgba(0, 102, 255, 0.5);
+            border-radius: 8px;
+            border: none;
+            opacity: 0.9;
+        }
+        
+        .pause-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        /* --- BANNER DE RECURSOS (AHORA SE MUESTRA/OCULTA) --- */
         .premium-banner {
             position: absolute; 
             bottom: 10px; 
@@ -136,12 +167,18 @@
             text-decoration: none; 
             z-index: 15; 
             border-radius: 4px; 
-            opacity: 1 !important; /* Siempre visible */
+            opacity: 0; /* Cambiado de 1 a 0 */
             box-shadow: 0 4px 12px rgba(0, 102, 255, 0.4);
             font-weight: 800; 
             font-size: 0.65rem; /* Más pequeño */
+            transition: opacity 0.3s ease;
+            pointer-events: none; /* Deshabilitar clics cuando esté oculto */
         }
-        /* Eliminamos .premium-banner.force-hide */
+        
+        .premium-banner.visible {
+            opacity: 1 !important;
+            pointer-events: auto; /* Habilitar clics cuando esté visible */
+        }
 
         /* --- CONTROLES SIMPLIFICADOS --- */
         .plyr__controls { 
@@ -255,6 +292,16 @@
                 height: 24px;
             }
             
+            .pause-btn {
+                width: 80px;
+                height: 55px;
+            }
+            
+            .pause-btn svg {
+                width: 28px;
+                height: 28px;
+            }
+            
             .premium-banner {
                 bottom: 12px;
                 right: 12px;
@@ -317,6 +364,15 @@
                     <div class="tap-feedback left" id="feedbackLeft"><div class="tap-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/></svg></div></div>
                     <div class="tap-feedback right" id="feedbackRight"><div class="tap-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg></div></div>
 
+                    <!-- Overlay de pausa con botón azul rectangular -->
+                    <div class="pause-overlay" id="pauseOverlay">
+                        <div class="pause-btn">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                            </svg>
+                        </div>
+                    </div>
+
                     <div class="start-screen-overlay" id="startScreen">
                         <div class="big-play-btn">
                             <svg viewBox="0 0 24 24">
@@ -364,8 +420,11 @@
         const startScreen = document.getElementById('startScreen');
         const wrapper = document.getElementById('videoWrapper');
         const loopIndicator = document.getElementById('loopIndicator');
+        const pauseOverlay = document.getElementById('pauseOverlay');
+        const bannerMaterial = document.getElementById('bannerMaterial');
         let lastTapTime = 0;
         let hasStarted = false;
+        let bannerHideTimeout = null;
         
         // Configuración del bucle de 30 segundos
         const loopStart = 30;
@@ -382,16 +441,54 @@
             if (isLooping) {
                 player.currentTime = loopStart;
             }
+            
+            // Mostrar banner al inicio (video pausado)
+            showBanner();
         });
+
+        // Función para mostrar el banner de recursos
+        function showBanner() {
+            clearTimeout(bannerHideTimeout);
+            bannerMaterial.classList.add('visible');
+        }
+
+        // Función para ocultar el banner de recursos después de 2.5 segundos
+        function hideBannerDelayed() {
+            clearTimeout(bannerHideTimeout);
+            bannerHideTimeout = setTimeout(() => {
+                bannerMaterial.classList.remove('visible');
+            }, 2500); // 2.5 segundos
+        }
 
         // Función para manejar la reproducción
         const handlePlay = () => {
             console.log('Reproduciendo - ocultando botón');
             startScreen.classList.add('hidden');
+            pauseOverlay.classList.remove('visible');
             hasStarted = true;
+            
             // Asegurar que el sonido esté activado
             player.volume = 1;
             player.muted = false;
+            
+            // Ocultar banner después de 2.5 segundos
+            hideBannerDelayed();
+        };
+
+        // Función para manejar la pausa
+        const handlePause = () => {
+            console.log('Video pausado');
+            
+            // Mostrar overlay de pausa y banner
+            if (hasStarted && player.paused) {
+                pauseOverlay.classList.add('visible');
+                showBanner();
+                
+                // También mostrar el overlay de inicio si el video terminó
+                if (player.currentTime >= player.duration - 0.5) {
+                    startScreen.classList.remove('hidden');
+                }
+            }
         };
 
         // Manejar clic en el botón de reproducción
@@ -429,6 +526,24 @@
             });
         });
 
+        // Manejar clic en el área del video para pausar/reproducir
+        wrapper.addEventListener('click', (e) => {
+            // Evitar que el doble toque interfiera
+            if (e.target.closest('.plyr__controls') || e.target.closest('.premium-banner') || e.target.closest('.loop-indicator')) return;
+            
+            const now = Date.now();
+            if (now - lastTapTime > 300) { // No es un doble toque
+                // Si el video está reproduciéndose, pausarlo
+                if (player.playing) {
+                    player.pause();
+                } else if (hasStarted && player.paused) {
+                    // Si está pausado y ya comenzó, reanudar
+                    player.play();
+                }
+            }
+            lastTapTime = now;
+        });
+
         // Escuchar eventos de estado del reproductor
         player.on('playing', handlePlay);
         
@@ -436,6 +551,8 @@
             console.log('Evento play disparado');
             handlePlay();
         });
+
+        player.on('pause', handlePause);
 
         // Controlar el bucle durante la reproducción
         player.on('timeupdate', () => {
@@ -450,23 +567,17 @@
             }
         });
 
-        // Manejar cuando el video se pausa
-        player.on('pause', () => {
-            console.log('Video pausado');
-            if (hasStarted && player.paused) {
-                startScreen.classList.remove('hidden');
-            }
-        });
-
         // Manejar cuando el video termina
         player.on('ended', () => {
             console.log('Video terminado');
             startScreen.classList.remove('hidden');
+            pauseOverlay.classList.remove('visible');
+            showBanner();
         });
 
-        // Función para manejar el doble toque
+        // Función para manejar el doble toque (navegación)
         const handleDoubleAction = (e) => {
-            if (e.target.closest('.plyr__controls') || e.target.closest('.premium-banner')) return;
+            if (e.target.closest('.plyr__controls') || e.target.closest('.premium-banner') || e.target.closest('.loop-indicator')) return;
             const now = Date.now();
             if (now - lastTapTime < 300) {
                 e.preventDefault();
@@ -498,7 +609,7 @@
             setTimeout(() => el.classList.remove('animate'), 500);
         };
 
-        wrapper.addEventListener('click', handleDoubleAction);
+        wrapper.addEventListener('dblclick', handleDoubleAction);
         wrapper.addEventListener('dblclick', (e) => e.preventDefault(), true);
         
         // Activar/desactivar bucle al hacer clic en el indicador
