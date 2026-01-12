@@ -18,25 +18,39 @@
         body { 
             margin: 0; 
             padding: 0; 
-            background: #000000; /* Fondo negro siempre */
+            background: #000000;
             font-family: 'Inter', sans-serif; 
             color: white; 
             overflow-x: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            width: 100%;
         }
 
-        /* --- CONTENEDOR PRINCIPAL RESPONSIVE --- */
-        .mobile-container {
-            width: 100%;
-            max-width: 360px; /* Ancho fijo como móvil */
-            margin: 0 auto;
-            background: #000;
-            box-shadow: 0 0 60px rgba(0, 102, 255, 0.2);
-            position: relative;
+        /* --- CONTENEDOR PARA ESCRITORIO --- */
+        @media (min-width: 768px) {
+            .desktop-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                background: #000;
+            }
+            
+            .content-wrapper {
+                width: 100%;
+                max-width: 360px; /* Ancho fijo como móvil en desktop */
+                background: #000;
+                box-shadow: 0 0 60px rgba(0, 102, 255, 0.2);
+            }
+        }
+
+        @media (max-width: 767px) {
+            .desktop-container {
+                display: block;
+            }
+            
+            .content-wrapper {
+                width: 100%;
+                max-width: 100%;
+            }
         }
 
         /* --- VIDEO HERO --- */
@@ -79,15 +93,16 @@
         }
         .start-screen-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
         
+        /* Botón de reproducción optimizado para móvil */
         .big-play-btn { 
-            width: 80px; /* Más pequeño para relación horizontal */
-            height: 40px; /* Más pequeño para relación horizontal */
+            width: 80px; 
+            height: 50px; 
             background: var(--brand-blue); 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             box-shadow: 0 8px 25px rgba(0, 102, 255, 0.5);
-            border-radius: 8px; /* Esquinas redondeadas */
+            border-radius: 8px;
             border: none;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
@@ -209,22 +224,51 @@
             box-sizing: border-box;
         }
 
-        /* --- RESPONSIVE ADAPTACIONES --- */
-        @media (max-width: 480px) {
-            .mobile-container {
-                max-width: 100%;
-                box-shadow: none;
-            }
-            
+        /* --- MEJORAS PARA MÓVIL --- */
+        @media (max-width: 767px) {
             .video-box {
                 aspect-ratio: 16/9;
             }
-        }
-
-        @media (min-width: 481px) {
-            .mobile-container {
-                margin: 20px auto;
-                border-radius: 0;
+            
+            .hero-video-section {
+                background: #000;
+            }
+            
+            .big-play-btn {
+                width: 90px;
+                height: 55px;
+            }
+            
+            .big-play-btn svg {
+                width: 24px;
+                height: 24px;
+            }
+            
+            .premium-banner {
+                bottom: 15px;
+                right: 15px;
+                padding: 10px 18px;
+                font-size: 0.75rem;
+            }
+            
+            .loop-indicator {
+                top: 15px;
+                left: 15px;
+                padding: 6px 12px;
+                font-size: 0.7rem;
+            }
+            
+            .lesson-title {
+                font-size: 1.4rem;
+            }
+            
+            .content-container {
+                padding: 25px 20px;
+            }
+            
+            .next-lesson-btn {
+                padding: 14px 28px;
+                font-size: 0.9rem;
             }
         }
 
@@ -245,43 +289,45 @@
 </head>
 <body>
 
-    <!-- Contenedor principal siempre en modo móvil -->
-    <div class="mobile-container">
-        <div class="hero-video-section">
-            <div class="video-box" id="videoWrapper">
+    <!-- Contenedor principal -->
+    <div class="desktop-container">
+        <div class="content-wrapper">
+            <div class="hero-video-section">
+                <div class="video-box" id="videoWrapper">
 
-                <!-- Indicador de bucle de 5 segundos -->
-                <div class="loop-indicator" id="loopIndicator">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
-                    </svg>
-                    <span>BUCLE: 5 SEGUNDOS</span>
-                </div>
-
-                <div class="tap-feedback left" id="feedbackLeft"><div class="tap-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/></svg></div></div>
-                <div class="tap-feedback right" id="feedbackRight"><div class="tap-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg></div></div>
-
-                <div class="start-screen-overlay" id="startScreen">
-                    <div class="big-play-btn">
+                    <!-- Indicador de bucle de 5 segundos -->
+                    <div class="loop-indicator" id="loopIndicator">
                         <svg viewBox="0 0 24 24">
-                            <path d="M8 5v14l11-7z"/>
+                            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
                         </svg>
+                        <span>BUCLE: 5 SEGUNDOS</span>
                     </div>
+
+                    <div class="tap-feedback left" id="feedbackLeft"><div class="tap-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/></svg></div></div>
+                    <div class="tap-feedback right" id="feedbackRight"><div class="tap-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg></div></div>
+
+                    <div class="start-screen-overlay" id="startScreen">
+                        <div class="big-play-btn">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <a href="material-japones.pdf" download class="premium-banner" id="bannerMaterial">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        <span>RECURSOS PDF</span>
+                    </a>
+                    
+                    <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="VKbvx2QU6jw"></div>
                 </div>
-
-                <a href="material-japones.pdf" download class="premium-banner" id="bannerMaterial">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    <span>RECURSOS PDF</span>
-                </a>
-                
-                <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="VKbvx2QU6jw"></div>
             </div>
-        </div>
 
-        <div class="content-container">
-            <h1 class="lesson-title">Lección 1: Yo soy / No soy</h1>
-            <p style="line-height: 1.6; color: #CBD5E0; font-size: 0.9rem;">Domina la gramática básica del japonés. Usa el doble toque lateral para repasar fragmentos. <strong style="color: var(--brand-blue);">Modo bucle activado: se repite un segmento de 5 segundos.</strong></p>
-            <a href="#" class="next-lesson-btn">Siguiente Lección →</a>
+            <div class="content-container">
+                <h1 class="lesson-title">Lección 1: Yo soy / No soy</h1>
+                <p style="line-height: 1.6; color: #CBD5E0; font-size: 0.9rem;">Domina la gramática básica del japonés. Usa el doble toque lateral para repasar fragmentos. <strong style="color: var(--brand-blue);">Modo bucle activado: se repite un segmento de 5 segundos.</strong></p>
+                <a href="#" class="next-lesson-btn">Siguiente Lección →</a>
+            </div>
         </div>
     </div>
 
