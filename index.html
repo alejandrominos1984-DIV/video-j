@@ -15,11 +15,82 @@
             --plyr-color-main: var(--brand-blue);
         }
 
-        body { margin: 0; padding: 0; background: #FFFFFF; font-family: 'Inter', sans-serif; color: var(--brand-dark); overflow-x: hidden; }
+        /* --- ESTILOS PARA MÓVIL --- */
+        @media (min-width: 768px) {
+            /* Ocultar en pantallas grandes */
+            body, .hero-video-section, .video-box, .content-container {
+                display: none !important;
+            }
+            
+            .mobile-message {
+                display: block !important;
+            }
+        }
 
-        /* --- VIDEO HERO --- */
-        .hero-video-section { width: 100%; background: #000; position: relative; }
-        .video-box { position: relative; width: 100%; overflow: hidden; line-height: 0; z-index: 0; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+        @media (max-width: 767px) {
+            /* Mostrar solo en móviles */
+            .mobile-message {
+                display: none !important;
+            }
+        }
+
+        .mobile-message {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            background: #000;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .mobile-message h1 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--brand-blue);
+        }
+
+        .mobile-message p {
+            font-size: 1rem;
+            max-width: 300px;
+            line-height: 1.5;
+            color: #CBD5E0;
+        }
+
+        body { 
+            margin: 0; 
+            padding: 0; 
+            background: #000000; /* Fondo negro para móvil */
+            font-family: 'Inter', sans-serif; 
+            color: white; 
+            overflow-x: hidden;
+        }
+
+        /* --- VIDEO HERO PARA MÓVIL --- */
+        .hero-video-section { 
+            width: 100%; 
+            max-width: 100vw;
+            background: #000; 
+            position: relative;
+            height: 100vh; /* Ocupa toda la pantalla del móvil */
+            overflow: hidden;
+        }
+        
+        .video-box { 
+            position: relative; 
+            width: 100%; 
+            height: 100vh; /* Altura completa del viewport */
+            overflow: hidden; 
+            line-height: 0; 
+            z-index: 0; 
+            -webkit-tap-highlight-color: transparent; 
+            touch-action: manipulation; 
+        }
 
         /* --- FEEDBACK VISUAL --- */
         .tap-feedback {
@@ -34,24 +105,24 @@
         .tap-feedback.animate { opacity: 1; }
         .tap-feedback.animate .tap-icon { transform: scale(1.1); }
 
-        /* --- BOTÓN INICIO MODIFICADO: ESQUINAS REDONDEADAS Y MÁS ESTÉTICO --- */
+        /* --- BOTÓN INICIO PARA MÓVIL --- */
         .start-screen-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5); /* Fondo más oscuro para mejor contraste */
+            background: rgba(0, 0, 0, 0.7); /* Fondo más oscuro para móvil */
             display: flex; align-items: center; justify-content: center;
             z-index: 20; cursor: pointer; transition: opacity 0.5s ease, visibility 0.5s;
         }
         .start-screen-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
         
         .big-play-btn { 
-            width: 120px; 
-            height: 60px; 
+            width: 100px; /* Más pequeño para móvil */
+            height: 50px; /* Más pequeño para móvil */
             background: var(--brand-blue); 
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            box-shadow: 0 12px 30px rgba(0, 102, 255, 0.4);
-            border-radius: 12px; /* Esquinas redondeadas para mejor estética */
+            box-shadow: 0 8px 25px rgba(0, 102, 255, 0.5);
+            border-radius: 12px; /* Esquinas redondeadas */
             border: none;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
@@ -62,29 +133,30 @@
         }
         
         .big-play-btn svg {
-            width: 30px;
-            height: 30px;
+            width: 24px; /* Más pequeño para móvil */
+            height: 24px; /* Más pequeño para móvil */
             fill: white;
         }
 
-        /* --- BANNER DE RECURSOS ROBUSTO (MODIFICADO: AZUL) --- */
+        /* --- BANNER DE RECURSOS PARA MÓVIL --- */
         .premium-banner {
-            position: absolute; bottom: 12px; right: 12px;
-            background: var(--brand-blue); /* Cambiado a azul */
+            position: absolute; bottom: 20px; right: 15px;
+            background: var(--brand-blue);
             color: #ffffff;
-            padding: 12px 22px; display: flex; align-items: center; gap: 10px;
-            text-decoration: none; z-index: 15; border-radius: 4px; 
+            padding: 10px 16px; /* Padding más pequeño para móvil */
+            display: flex; align-items: center; gap: 8px;
+            text-decoration: none; z-index: 15; border-radius: 6px; 
             opacity: 1; transition: opacity 0.6s ease;
-            box-shadow: 0 6px 20px rgba(0, 102, 255, 0.4);
-            font-weight: 800; font-size: 0.8rem;
+            box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
+            font-weight: 800; font-size: 0.7rem; /* Tamaño de fuente más pequeño */
         }
         .premium-banner.force-hide { opacity: 0; pointer-events: none; }
 
-        /* --- CONTROLES SIMPLIFICADOS - SIN BARRA DE PROGRESO --- */
+        /* --- CONTROLES SIMPLIFICADOS PARA MÓVIL --- */
         .plyr__controls { 
             background: linear-gradient(transparent, rgba(0,0,0,0.9)) !important; 
-            padding: 10px 15px !important; 
-            min-height: 50px !important;
+            padding: 8px 12px !important; /* Padding más pequeño */
+            min-height: 45px !important; /* Altura más pequeña */
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
@@ -95,11 +167,11 @@
             display: none !important;
         }
         
-        /* Mantenemos la duración pero la centramos */
+        /* Duración centrada para móvil */
         .plyr__time--duration {
             display: block !important; 
             visibility: visible !important;
-            font-size: 0.75rem !important; 
+            font-size: 0.7rem !important; /* Tamaño más pequeño */
             font-weight: 700 !important;
             color: #ffffff !important;
             margin: 0 !important;
@@ -111,26 +183,26 @@
             display: none !important; 
         }
         
-        /* Botón de play de Plyr oculto (usamos el nuestro) */
+        /* Botón de play de Plyr oculto */
         .plyr__control--play {
             display: none !important;
         }
         
-        /* Ocultar cualquier otro control que pueda aparecer */
+        /* Ocultar cualquier otro control */
         .plyr__controls__item:not(.plyr__time--duration) {
             display: none !important;
         }
 
-        /* --- INDICADOR DE BUCLE DE 5 SEGUNDOS --- */
+        /* --- INDICADOR DE BUCLE PARA MÓVIL --- */
         .loop-indicator {
             position: absolute;
             top: 15px;
             left: 15px;
             background: rgba(0, 0, 0, 0.7);
             color: var(--brand-blue);
-            padding: 6px 12px;
+            padding: 6px 10px; /* Padding más pequeño */
             border-radius: 20px;
-            font-size: 0.7rem;
+            font-size: 0.65rem; /* Tamaño más pequeño */
             font-weight: 700;
             z-index: 10;
             display: flex;
@@ -140,18 +212,66 @@
         }
         
         .loop-indicator svg {
-            width: 14px;
-            height: 14px;
+            width: 12px; /* Más pequeño */
+            height: 12px; /* Más pequeño */
             fill: var(--brand-blue);
         }
 
-        .content-container { max-width: 900px; margin: 0 auto; padding: 30px 20px; }
-        .lesson-title { font-size: 1.8rem; font-weight: 800; margin-bottom: 10px; }
-        .next-lesson-btn { display: inline-block; background: var(--brand-blue); color: white; padding: 16px 32px; border-radius: 12px; font-weight: 700; text-decoration: none; margin-top: 20px; }
+        /* --- CONTENIDO PARA MÓVIL --- */
+        .content-container { 
+            max-width: 100%; 
+            margin: 0 auto; 
+            padding: 20px 15px; /* Padding más pequeño */
+            background: #000; /* Fondo negro para móvil */
+            color: white;
+        }
+        .lesson-title { 
+            font-size: 1.4rem; /* Tamaño más pequeño para móvil */
+            font-weight: 800; 
+            margin-bottom: 10px; 
+            color: white;
+        }
+        .next-lesson-btn { 
+            display: inline-block; 
+            background: var(--brand-blue); 
+            color: white; 
+            padding: 14px 28px; /* Padding más pequeño */
+            border-radius: 10px; 
+            font-weight: 700; 
+            text-decoration: none; 
+            margin-top: 20px; 
+            font-size: 0.9rem; /* Tamaño más pequeño */
+            width: 100%; /* Ancho completo en móvil */
+            text-align: center;
+        }
+
+        /* --- ESTILOS DEL REPRODUCTOR PARA MÓVIL --- */
+        .plyr__video-wrapper {
+            width: 100%;
+            height: 100vh !important; /* Altura completa del viewport */
+        }
+        
+        .plyr--video {
+            height: 100vh !important; /* Altura completa del viewport */
+        }
+        
+        .plyr__poster {
+            background-size: cover !important;
+        }
     </style>
 </head>
 <body>
 
+    <!-- Mensaje para pantallas grandes -->
+    <div class="mobile-message">
+        <h1>📱 Divélun Academy</h1>
+        <p>Este contenido está optimizado para dispositivos móviles. Por favor, accede desde un teléfono celular para ver la lección.</p>
+        <p style="margin-top: 20px; font-size: 0.9rem; color: #718096;">
+            Si estás en un dispositivo móvil y ves este mensaje, actualiza la página.
+        </p>
+    </div>
+
+    <!-- Contenido para móviles -->
     <div class="hero-video-section">
         <div class="video-box" id="videoWrapper">
 
@@ -175,7 +295,7 @@
             </div>
 
             <a href="material-japones.pdf" download class="premium-banner" id="bannerMaterial">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                 <span>RECURSOS PDF</span>
             </a>
             
@@ -185,24 +305,25 @@
 
     <div class="content-container">
         <h1 class="lesson-title">Lección 1: Yo soy / No soy</h1>
-        <p style="line-height: 1.7; color: #4A5568;">Domina la gramática básica del japonés. Usa el doble toque lateral para repasar fragmentos. <strong>Modo bucle activado: se repite un segmento de 5 segundos.</strong></p>
+        <p style="line-height: 1.7; color: #CBD5E0;">Domina la gramática básica del japonés. Usa el doble toque lateral para repasar fragmentos. <strong style="color: var(--brand-blue);">Modo bucle activado: se repite un segmento de 5 segundos.</strong></p>
         <a href="#" class="next-lesson-btn">Siguiente Lección →</a>
     </div>
 
     <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
     <script>
-        // Inicializar el reproductor primero
+        // Inicializar el reproductor
         const player = new Plyr('#player', {
             controls: ['play', 'duration'],
-            fullscreen: { enabled: false },
-            autoplay: false, // Desactivamos autoplay para control manual
-            muted: false, // Sonido activado
+            fullscreen: { enabled: true }, // Habilitar pantalla completa en móvil
+            autoplay: false,
+            muted: false,
+            ratio: '16:9',
             youtube: { 
                 noCookie: true, 
                 rel: 0, 
                 modestbranding: 1,
-                playsinline: 1, // Para iOS
-                enablejsapi: 1 // Habilitar API de YouTube
+                playsinline: 1,
+                enablejsapi: 1
             }
         });
 
@@ -215,15 +336,12 @@
         let hasStarted = false;
         
         // Configuración del bucle de 5 segundos
-        const loopStart = 30; // Segundo inicial del bucle (ajusta este valor)
-        const loopEnd = 35;   // Segundo final del bucle (5 segundos después)
-        let isLooping = true; // Control del bucle
+        const loopStart = 30;
+        const loopEnd = 35;
+        let isLooping = true;
         
         // Esperar a que el reproductor esté listo
         player.on('ready', () => {
-            console.log('Reproductor listo');
-            
-            // Configurar el bucle inicial
             if (isLooping) {
                 player.currentTime = loopStart;
             }
@@ -233,26 +351,18 @@
         startScreen.addEventListener('click', (e) => {
             e.stopPropagation();
             
-            // Intentar reproducir el video
             player.play().then(() => {
-                console.log('Reproducción iniciada');
                 startScreen.classList.add('hidden');
                 hasStarted = true;
                 
-                // Si estamos en modo bucle, ajustar el tiempo inicial
                 if (isLooping && player.currentTime < loopStart) {
                     player.currentTime = loopStart;
                 }
             }).catch(error => {
-                console.error('Error al reproducir:', error);
-                
-                // Intentar con muted si falla por políticas de autoplay
                 player.muted = true;
                 player.play().then(() => {
-                    console.log('Reproducción iniciada con muted');
                     startScreen.classList.add('hidden');
                     hasStarted = true;
-                    // Restaurar sonido después de iniciar
                     setTimeout(() => {
                         player.muted = false;
                     }, 1000);
@@ -260,23 +370,14 @@
             });
         });
 
-        // También permitir clic en el overlay completo
-        document.getElementById('startScreen').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('startScreen')) {
-                e.target.click();
-            }
-        });
-
         // Controlar el bucle durante la reproducción
         player.on('timeupdate', () => {
             if (!isLooping || !player.playing) return;
             
-            // Si llegamos al final del segmento, volver al inicio
             if (player.currentTime >= loopEnd) {
                 player.currentTime = loopStart;
             }
             
-            // También asegurarnos de no salirnos del segmento por navegación manual
             if (player.currentTime < loopStart) {
                 player.currentTime = loopStart;
             }
@@ -284,7 +385,6 @@
 
         // Manejar cuando el video se pausa
         player.on('pause', () => {
-            // Mostrar el botón de play cuando se pausa
             if (hasStarted && player.paused) {
                 startScreen.classList.remove('hidden');
             }
@@ -311,7 +411,6 @@
                 const rect = wrapper.getBoundingClientRect();
                 const x = (e.clientX || e.changedTouches[0].clientX) - rect.left;
                 if (x < rect.width / 2) { 
-                    // En modo bucle, ajustamos el retroceso para mantenernos en el segmento
                     let newTime = player.currentTime - 10;
                     if (isLooping && newTime < loopStart) {
                         newTime = loopStart;
@@ -319,10 +418,9 @@
                     player.currentTime = Math.max(0, newTime);
                     showFeedback(document.getElementById('feedbackLeft')); 
                 } else { 
-                    // En modo bucle, ajustamos el avance para mantenernos en el segmento
                     let newTime = player.currentTime + 10;
                     if (isLooping && newTime > loopEnd) {
-                        newTime = loopEnd - 0.1; // Un poco antes del final para no disparar el bucle inmediatamente
+                        newTime = loopEnd - 0.1;
                     }
                     player.currentTime = Math.min(player.duration || Infinity, newTime);
                     showFeedback(document.getElementById('feedbackRight')); 
@@ -352,7 +450,6 @@
                 loopIndicator.style.pointerEvents = 'auto';
                 loopIndicator.style.cursor = 'pointer';
                 
-                // Si el video está reproduciéndose, ajustar al segmento
                 if (player.playing && (player.currentTime < loopStart || player.currentTime > loopEnd)) {
                     player.currentTime = loopStart;
                 }
@@ -365,16 +462,27 @@
             }
         });
         
-        // Permitir interacción con el indicador
         loopIndicator.style.pointerEvents = 'auto';
         loopIndicator.style.cursor = 'pointer';
         
-        // Asegurarnos de que el video comience en el tiempo correcto cuando esté listo
+        // Asegurarnos de que el video comience en el tiempo correcto
         player.on('canplay', () => {
             if (isLooping) {
                 player.currentTime = loopStart;
             }
         });
+
+        // Detectar si es móvil y ajustar comportamientos
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 767;
+        }
+
+        // Si no es móvil, mostrar mensaje
+        if (!isMobile()) {
+            document.querySelector('.hero-video-section').style.display = 'none';
+            document.querySelector('.content-container').style.display = 'none';
+            document.querySelector('.mobile-message').style.display = 'flex';
+        }
     </script>
 </body>
 </html>
