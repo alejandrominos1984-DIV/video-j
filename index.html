@@ -132,6 +132,7 @@
         
         .pause-overlay.visible { 
             opacity: 1; 
+            pointer-events: auto; /* Habilitar interacción cuando es visible */
         }
         
         .pause-btn { 
@@ -145,6 +146,13 @@
             border-radius: 8px;
             border: none;
             opacity: 0.9;
+            cursor: pointer; /* Cambiar cursor a pointer */
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+        
+        .pause-btn:hover {
+            transform: scale(1.05);
+            opacity: 1;
         }
         
         .pause-btn svg {
@@ -295,6 +303,7 @@
             .pause-btn {
                 width: 80px;
                 height: 55px;
+                cursor: pointer;
             }
             
             .pause-btn svg {
@@ -366,11 +375,11 @@
 
                     <!-- Overlay de pausa con botón azul rectangular -->
                     <div class="pause-overlay" id="pauseOverlay">
-                        <div class="pause-btn">
+                        <button class="pause-btn" id="pauseButton">
                             <svg viewBox="0 0 24 24">
-                                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                                <path d="M8 5v14l11-7z"/>
                             </svg>
-                        </div>
+                        </button>
                     </div>
 
                     <div class="start-screen-overlay" id="startScreen">
@@ -421,6 +430,7 @@
         const wrapper = document.getElementById('videoWrapper');
         const loopIndicator = document.getElementById('loopIndicator');
         const pauseOverlay = document.getElementById('pauseOverlay');
+        const pauseButton = document.getElementById('pauseButton');
         const bannerMaterial = document.getElementById('bannerMaterial');
         let lastTapTime = 0;
         let hasStarted = false;
@@ -471,6 +481,13 @@
             player.volume = 1;
             player.muted = false;
             
+            // Cambiar icono del botón de pausa a play
+            pauseButton.innerHTML = `
+                <svg viewBox="0 0 24 24">
+                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                </svg>
+            `;
+            
             // Ocultar banner después de 2.5 segundos
             hideBannerDelayed();
         };
@@ -484,6 +501,13 @@
                 pauseOverlay.classList.add('visible');
                 showBanner();
                 
+                // Cambiar icono del botón de pausa a play (triángulo)
+                pauseButton.innerHTML = `
+                    <svg viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                `;
+                
                 // También mostrar el overlay de inicio si el video terminó
                 if (player.currentTime >= player.duration - 0.5) {
                     startScreen.classList.remove('hidden');
@@ -491,10 +515,10 @@
             }
         };
 
-        // Manejar clic en el botón de reproducción
+        // Manejar clic en el botón de reproducción inicial
         startScreen.addEventListener('click', (e) => {
             e.stopPropagation();
-            console.log('Clic en botón de reproducción');
+            console.log('Clic en botón de reproducción inicial');
             
             // Ocultar inmediatamente el botón para dar feedback visual
             startScreen.classList.add('hidden');
@@ -526,13 +550,34 @@
             });
         });
 
+        // Manejar clic en el botón azul de pausa/reproducción
+        pauseButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            console.log('Clic en botón azul de pausa/reproducción');
+            
+            // Si el video está pausado, reproducir
+            if (player.paused) {
+                player.play();
+            } else {
+                // Si el video está reproduciéndose, pausar
+                player.pause();
+            }
+        });
+
         // Manejar clic en el área del video para pausar/reproducir
         wrapper.addEventListener('click', (e) => {
             // Evitar que el doble toque interfiera
-            if (e.target.closest('.plyr__controls') || e.target.closest('.premium-banner') || e.target.closest('.loop-indicator')) return;
-            
             const now = Date.now();
             if (now - lastTapTime > 300) { // No es un doble toque
+                // Evitar clics en elementos específicos
+                if (e.target.closest('.plyr__controls') || 
+                    e.target.closest('.premium-banner') || 
+                    e.target.closest('.loop-indicator') ||
+                    e.target.closest('.start-screen-overlay') ||
+                    e.target.closest('.pause-overlay')) {
+                    return;
+                }
+                
                 // Si el video está reproduciéndose, pausarlo
                 if (player.playing) {
                     player.pause();
@@ -573,11 +618,23 @@
             startScreen.classList.remove('hidden');
             pauseOverlay.classList.remove('visible');
             showBanner();
+            
+            // Cambiar icono del botón de pausa a play (triángulo)
+            pauseButton.innerHTML = `
+                <svg viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+            `;
         });
 
         // Función para manejar el doble toque (navegación)
         const handleDoubleAction = (e) => {
-            if (e.target.closest('.plyr__controls') || e.target.closest('.premium-banner') || e.target.closest('.loop-indicator')) return;
+            if (e.target.closest('.plyr__controls') || 
+                e.target.closest('.premium-banner') || 
+                e.target.closest('.loop-indicator') ||
+                e.target.closest('.start-screen-overlay') ||
+                e.target.closest('.pause-overlay')) return;
+                
             const now = Date.now();
             if (now - lastTapTime < 300) {
                 e.preventDefault();
@@ -609,7 +666,7 @@
             setTimeout(() => el.classList.remove('animate'), 500);
         };
 
-        wrapper.addEventListener('dblclick', handleDoubleAction);
+        wrapper.addEventListener('click', handleDoubleAction);
         wrapper.addEventListener('dblclick', (e) => e.preventDefault(), true);
         
         // Activar/desactivar bucle al hacer clic en el indicador
