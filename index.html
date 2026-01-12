@@ -122,19 +122,26 @@
             fill: white;
         }
 
-        /* --- BANNER DE RECURSOS --- */
+        /* --- BANNER DE RECURSOS (MÁS PEQUEÑO Y SIEMPRE VISIBLE) --- */
         .premium-banner {
-            position: absolute; bottom: 12px; right: 12px;
+            position: absolute; 
+            bottom: 10px; 
+            right: 10px;
             background: var(--brand-blue);
             color: #ffffff;
-            padding: 8px 16px;
-            display: flex; align-items: center; gap: 6px;
-            text-decoration: none; z-index: 15; border-radius: 4px; 
-            opacity: 1; transition: opacity 0.6s ease;
+            padding: 6px 12px; /* Reducido */
+            display: flex; 
+            align-items: center; 
+            gap: 5px; /* Reducido */
+            text-decoration: none; 
+            z-index: 15; 
+            border-radius: 4px; 
+            opacity: 1 !important; /* Siempre visible */
             box-shadow: 0 4px 12px rgba(0, 102, 255, 0.4);
-            font-weight: 800; font-size: 0.7rem;
+            font-weight: 800; 
+            font-size: 0.65rem; /* Más pequeño */
         }
-        .premium-banner.force-hide { opacity: 0; pointer-events: none; }
+        /* Eliminamos .premium-banner.force-hide */
 
         /* --- CONTROLES SIMPLIFICADOS --- */
         .plyr__controls { 
@@ -165,6 +172,11 @@
         }
         
         .plyr__control--play {
+            display: none !important;
+        }
+        
+        /* Ocultar botón de pantalla completa */
+        .plyr__control--fullscreen {
             display: none !important;
         }
         
@@ -244,10 +256,10 @@
             }
             
             .premium-banner {
-                bottom: 15px;
-                right: 15px;
-                padding: 10px 18px;
-                font-size: 0.75rem;
+                bottom: 12px;
+                right: 12px;
+                padding: 7px 14px;
+                font-size: 0.7rem;
             }
             
             .loop-indicator {
@@ -314,7 +326,7 @@
                     </div>
 
                     <a href="material-japones.pdf" download class="premium-banner" id="bannerMaterial">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                         <span>RECURSOS PDF</span>
                     </a>
                     
@@ -332,12 +344,13 @@
 
     <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
     <script>
-        // Inicializar el reproductor
+        // Inicializar el reproductor con las nuevas configuraciones
         const player = new Plyr('#player', {
             controls: ['play', 'duration'],
-            fullscreen: { enabled: true },
+            fullscreen: { enabled: false }, // Desactivar pantalla completa
             autoplay: false,
-            muted: false,
+            muted: false, // Sonido siempre activado
+            volume: 1, // Volumen máximo
             ratio: '16:9',
             youtube: { 
                 noCookie: true, 
@@ -348,11 +361,9 @@
             }
         });
 
-        const banner = document.getElementById('bannerMaterial');
         const startScreen = document.getElementById('startScreen');
         const wrapper = document.getElementById('videoWrapper');
         const loopIndicator = document.getElementById('loopIndicator');
-        let hideTimer;
         let lastTapTime = 0;
         let hasStarted = false;
         
@@ -361,9 +372,13 @@
         const loopEnd = 35;
         let isLooping = true;
         
-        // Esperar a que el reproductor esté listo
+        // Configurar el volumen al máximo cuando el reproductor esté listo
         player.on('ready', () => {
             console.log('Reproductor listo');
+            // Asegurar que el sonido esté activado
+            player.volume = 1;
+            player.muted = false;
+            
             if (isLooping) {
                 player.currentTime = loopStart;
             }
@@ -374,6 +389,9 @@
             console.log('Reproduciendo - ocultando botón');
             startScreen.classList.add('hidden');
             hasStarted = true;
+            // Asegurar que el sonido esté activado
+            player.volume = 1;
+            player.muted = false;
         };
 
         // Manejar clic en el botón de reproducción
@@ -383,6 +401,10 @@
             
             // Ocultar inmediatamente el botón para dar feedback visual
             startScreen.classList.add('hidden');
+            
+            // Asegurar que el sonido esté activado antes de reproducir
+            player.volume = 1;
+            player.muted = false;
             
             player.play().then(() => {
                 console.log('Reproducción exitosa');
@@ -396,15 +418,12 @@
                 // Si falla, mostrar el botón de nuevo
                 startScreen.classList.remove('hidden');
                 
-                player.muted = true;
+                // Intentar sin muted (ya que muted está en false)
                 player.play().then(() => {
-                    console.log('Reproducción con muted exitosa');
+                    console.log('Reproducción exitosa en segundo intento');
                     hasStarted = true;
-                    setTimeout(() => {
-                        player.muted = false;
-                    }, 1000);
                 }).catch(err => {
-                    console.error('Error incluso con muted:', err);
+                    console.error('Error en segundo intento:', err);
                     startScreen.classList.remove('hidden');
                 });
             });
@@ -443,18 +462,6 @@
         player.on('ended', () => {
             console.log('Video terminado');
             startScreen.classList.remove('hidden');
-        });
-
-        // Controlar visibilidad del banner
-        player.on('controlsshown', () => { 
-            clearTimeout(hideTimer); 
-            banner.classList.remove('force-hide');
-        });
-
-        player.on('controlshidden', () => { 
-            hideTimer = setTimeout(() => { 
-                banner.classList.add('force-hide');
-            }, 2000); 
         });
 
         // Función para manejar el doble toque
