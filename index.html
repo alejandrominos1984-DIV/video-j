@@ -37,7 +37,8 @@
         /* --- BOTÓN INICIO MODIFICADO: ESQUINAS REDONDEADAS Y MÁS ESTÉTICO --- */
         .start-screen-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: transparent; display: flex; align-items: center; justify-content: center;
+            background: rgba(0, 0, 0, 0.5); /* Fondo más oscuro para mejor contraste */
+            display: flex; align-items: center; justify-content: center;
             z-index: 20; cursor: pointer; transition: opacity 0.5s ease, visibility 0.5s;
         }
         .start-screen-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
@@ -190,10 +191,19 @@
 
     <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
     <script>
+        // Inicializar el reproductor primero
         const player = new Plyr('#player', {
             controls: ['play', 'duration'],
             fullscreen: { enabled: false },
-            youtube: { noCookie: true, rel: 0, modestbranding: 1 }
+            autoplay: false, // Desactivamos autoplay para control manual
+            muted: false, // Sonido activado
+            youtube: { 
+                noCookie: true, 
+                rel: 0, 
+                modestbranding: 1,
+                playsinline: 1, // Para iOS
+                enablejsapi: 1 // Habilitar API de YouTube
+            }
         });
 
         const banner = document.getElementById('bannerMaterial');
@@ -209,16 +219,51 @@
         const loopEnd = 35;   // Segundo final del bucle (5 segundos después)
         let isLooping = true; // Control del bucle
         
-        // Iniciar bucle cuando el video comience
-        player.on('playing', () => { 
-            if (!hasStarted) { 
-                startScreen.classList.add('hidden'); 
-                hasStarted = true; 
-            }
+        // Esperar a que el reproductor esté listo
+        player.on('ready', () => {
+            console.log('Reproductor listo');
             
-            // Si estamos en modo bucle, ajustar el tiempo inicial
-            if (isLooping && player.currentTime < loopStart) {
+            // Configurar el bucle inicial
+            if (isLooping) {
                 player.currentTime = loopStart;
+            }
+        });
+
+        // Manejar clic en el botón de reproducción
+        startScreen.addEventListener('click', (e) => {
+            e.stopPropagation();
+            
+            // Intentar reproducir el video
+            player.play().then(() => {
+                console.log('Reproducción iniciada');
+                startScreen.classList.add('hidden');
+                hasStarted = true;
+                
+                // Si estamos en modo bucle, ajustar el tiempo inicial
+                if (isLooping && player.currentTime < loopStart) {
+                    player.currentTime = loopStart;
+                }
+            }).catch(error => {
+                console.error('Error al reproducir:', error);
+                
+                // Intentar con muted si falla por políticas de autoplay
+                player.muted = true;
+                player.play().then(() => {
+                    console.log('Reproducción iniciada con muted');
+                    startScreen.classList.add('hidden');
+                    hasStarted = true;
+                    // Restaurar sonido después de iniciar
+                    setTimeout(() => {
+                        player.muted = false;
+                    }, 1000);
+                });
+            });
+        });
+
+        // También permitir clic en el overlay completo
+        document.getElementById('startScreen').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('startScreen')) {
+                e.target.click();
             }
         });
 
@@ -239,8 +284,8 @@
 
         // Manejar cuando el video se pausa
         player.on('pause', () => {
-            // Si estamos en modo bucle y el video se pausa al final, mostrar botón de play
-            if (isLooping && player.currentTime >= loopEnd - 0.5) {
+            // Mostrar el botón de play cuando se pausa
+            if (hasStarted && player.paused) {
                 startScreen.classList.remove('hidden');
             }
         });
@@ -324,10 +369,11 @@
         loopIndicator.style.pointerEvents = 'auto';
         loopIndicator.style.cursor = 'pointer';
         
-        // Ajustar el bucle cuando el video esté listo
-        player.on('ready', () => {
-            // Mostrar el tiempo del segmento en la consola para referencia
-            console.log(`Bucle configurado: ${loopStart}s a ${loopEnd}s (${loopEnd-loopStart} segundos)`);
+        // Asegurarnos de que el video comience en el tiempo correcto cuando esté listo
+        player.on('canplay', () => {
+            if (isLooping) {
+                player.currentTime = loopStart;
+            }
         });
     </script>
 </body>
