@@ -520,298 +520,281 @@
 
     <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
     <script>
-        // ============================================
-        // CONFIGURACIÓN GENERAL Y NAVEGACIÓN
-        // ============================================
+        // Variables globales para los reproductores
+        let player1, player2;
         
-        // Sistema de navegación entre lecciones
-        const lesson1 = document.getElementById('lesson1');
-        const lesson2 = document.getElementById('lesson2');
-        const nextLesson1Btn = document.getElementById('nextLesson1');
-        const prevLesson2Btn = document.getElementById('prevLesson2');
-        
-        // Función para cambiar entre lecciones
-        function switchLesson(fromLesson, toLesson) {
-            // Detener el video actual si está reproduciéndose
-            if (fromLesson === 'lesson1' && player1 && player1.playing) {
-                player1.pause();
-            } else if (fromLesson === 'lesson2' && player2 && player2.playing) {
-                player2.pause();
-            }
-            
-            // Cambiar visibilidad de las lecciones
-            document.getElementById(fromLesson).classList.remove('active');
-            document.getElementById(toLesson).classList.add('active');
-            
-            // Reiniciar el banner para la nueva lección
-            if (toLesson === 'lesson1') {
-                showBanner('lesson1');
-            } else if (toLesson === 'lesson2') {
-                showBanner('lesson2');
-            }
-        }
-        
-        // Event listeners para navegación
-        nextLesson1Btn.addEventListener('click', () => {
-            switchLesson('lesson1', 'lesson2');
-        });
-        
-        prevLesson2Btn.addEventListener('click', () => {
-            switchLesson('lesson2', 'lesson1');
-        });
-        
-        // ============================================
-        // FUNCIONES COMUNES PARA AMBAS LECCIONES
-        // ============================================
-        
-        // Configuración del bucle de 30 segundos (común para ambas lecciones)
+        // Configuración del bucle de 30 segundos
         const loopStart = 30;
         const loopEnd = 60;
         
-        // Función para inicializar una lección
-        function initializeLesson(lessonNum) {
-            const player = window[`player${lessonNum}`];
-            const startScreen = document.getElementById(`startScreen${lessonNum}`);
-            const pauseOverlay = document.getElementById(`pauseOverlay${lessonNum}`);
-            const pauseButton = document.getElementById(`pauseButton${lessonNum}`);
-            const bannerMaterial = document.getElementById(`bannerMaterial${lessonNum}`);
-            const loopIndicator = document.getElementById(`loopIndicator${lessonNum}`);
+        // ============================================
+        // INICIALIZACIÓN DE LA LECCIÓN 1
+        // ============================================
+        function initializeLesson1() {
+            // Elementos de la lección 1
+            const startScreen1 = document.getElementById('startScreen1');
+            const pauseOverlay1 = document.getElementById('pauseOverlay1');
+            const pauseButton1 = document.getElementById('pauseButton1');
+            const bannerMaterial1 = document.getElementById('bannerMaterial1');
+            const loopIndicator1 = document.getElementById('loopIndicator1');
+            const touchCenter1 = document.getElementById('touchCenter1');
+            const touchLeft1 = document.getElementById('touchLeft1');
+            const touchRight1 = document.getElementById('touchRight1');
             
-            let hasStarted = false;
-            let bannerHideTimeout = null;
-            let isLooping = true;
+            let hasStarted1 = false;
+            let bannerHideTimeout1 = null;
+            let isLooping1 = true;
             
             // Variables para control de toques
-            let tapCount = 0;
-            let tapTimeout = null;
-            let lastTapTime = 0;
-            let lastTapArea = null;
+            let tapCount1 = 0;
+            let tapTimeout1 = null;
+            let lastTapTime1 = 0;
+            let lastTapArea1 = null;
             
-            // ============================================
-            // FUNCIONES ESPECÍFICAS DE LA LECCIÓN
-            // ============================================
+            // Inicializar reproductor
+            player1 = new Plyr('#player1', {
+                controls: ['play', 'duration'],
+                fullscreen: { enabled: false },
+                autoplay: false,
+                muted: false,
+                volume: 1,
+                ratio: '16:9',
+                youtube: { 
+                    noCookie: true, 
+                    rel: 0, 
+                    modestbranding: 1,
+                    playsinline: 1,
+                    enablejsapi: 1
+                }
+            });
             
             // Función para mostrar el banner de recursos
-            function showBanner() {
-                clearTimeout(bannerHideTimeout);
-                bannerMaterial.classList.add('visible');
+            function showBanner1() {
+                clearTimeout(bannerHideTimeout1);
+                bannerMaterial1.classList.add('visible');
             }
             
             // Función para ocultar el banner de recursos después de 2.5 segundos
-            function hideBannerDelayed() {
-                clearTimeout(bannerHideTimeout);
-                bannerHideTimeout = setTimeout(() => {
-                    bannerMaterial.classList.remove('visible');
-                }, 2500); // 2.5 segundos
+            function hideBannerDelayed1() {
+                clearTimeout(bannerHideTimeout1);
+                bannerHideTimeout1 = setTimeout(() => {
+                    bannerMaterial1.classList.remove('visible');
+                }, 2500);
             }
             
             // Función para manejar la reproducción
-            const handlePlay = () => {
-                startScreen.classList.add('hidden');
-                pauseOverlay.classList.remove('visible');
-                hasStarted = true;
+            function handlePlay1() {
+                console.log('Lección 1: Reproduciendo');
+                startScreen1.classList.add('hidden');
+                pauseOverlay1.classList.remove('visible');
+                hasStarted1 = true;
                 
                 // Cambiar icono del botón de pausa a pausa (dos barras)
-                pauseButton.innerHTML = `
+                pauseButton1.innerHTML = `
                     <svg viewBox="0 0 24 24">
                         <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
                     </svg>
                 `;
                 
                 // Ocultar banner después de 2.5 segundos
-                hideBannerDelayed();
-            };
+                hideBannerDelayed1();
+            }
             
             // Función para manejar la pausa
-            const handlePause = () => {
+            function handlePause1() {
+                console.log('Lección 1: Pausado');
                 // Mostrar overlay de pausa y banner
-                if (hasStarted && player.paused) {
-                    pauseOverlay.classList.add('visible');
-                    showBanner();
+                if (hasStarted1 && player1.paused) {
+                    pauseOverlay1.classList.add('visible');
+                    showBanner1();
                     
                     // Cambiar icono del botón de pausa a play (triángulo)
-                    pauseButton.innerHTML = `
+                    pauseButton1.innerHTML = `
                         <svg viewBox="0 0 24 24">
                             <path d="M8 5v14l11-7z"/>
                         </svg>
                     `;
                     
                     // También mostrar el overlay de inicio si el video terminó
-                    if (player.currentTime >= player.duration - 0.5) {
-                        startScreen.classList.remove('hidden');
+                    if (player1.currentTime >= player1.duration - 0.5) {
+                        startScreen1.classList.remove('hidden');
                     }
                 }
-            };
+            }
             
             // Función para manejar toques en diferentes áreas
-            function handleTap(area) {
+            function handleTap1(area) {
                 const now = Date.now();
-                const timeSinceLastTap = now - lastTapTime;
+                const timeSinceLastTap = now - lastTapTime1;
                 
                 // Si es el primer toque o han pasado más de 300ms desde el último toque
-                if (timeSinceLastTap > 300 || lastTapArea !== area) {
+                if (timeSinceLastTap > 300 || lastTapArea1 !== area) {
                     // Es un toque simple
-                    tapCount = 1;
-                    lastTapArea = area;
+                    tapCount1 = 1;
+                    lastTapArea1 = area;
                     
                     // Configurar timeout para detectar si es un toque simple
-                    if (tapTimeout) clearTimeout(tapTimeout);
-                    tapTimeout = setTimeout(() => {
+                    if (tapTimeout1) clearTimeout(tapTimeout1);
+                    tapTimeout1 = setTimeout(() => {
                         // Es un toque simple
                         if (area === 'center') {
                             // Área central: pausar o reproducir
-                            if (player.playing) {
-                                player.pause();
-                            } else if (hasStarted && player.paused) {
-                                player.play();
+                            if (player1.playing) {
+                                player1.pause();
+                            } else if (hasStarted1 && player1.paused) {
+                                player1.play();
                             }
                         }
                         // Para áreas laterales, el toque simple no hace nada
-                        tapCount = 0;
+                        tapCount1 = 0;
                     }, 300);
                 } else {
                     // Es un segundo toque en menos de 300ms (doble toque)
-                    tapCount++;
-                    if (tapTimeout) clearTimeout(tapTimeout);
+                    tapCount1++;
+                    if (tapTimeout1) clearTimeout(tapTimeout1);
                     
-                    if (tapCount === 2) {
+                    if (tapCount1 === 2) {
                         // Es un doble toque
                         if (area === 'left') {
                             // Doble toque izquierdo: retroceder 10 segundos
-                            let newTime = player.currentTime - 10;
-                            if (isLooping && newTime < loopStart) {
+                            let newTime = player1.currentTime - 10;
+                            if (isLooping1 && newTime < loopStart) {
                                 newTime = loopStart;
                             }
-                            player.currentTime = Math.max(0, newTime);
-                            showFeedback(document.getElementById(`feedbackLeft${lessonNum}`));
+                            player1.currentTime = Math.max(0, newTime);
+                            showFeedback1(document.getElementById('feedbackLeft1'));
                         } else if (area === 'right') {
                             // Doble toque derecho: adelantar 10 segundos
-                            let newTime = player.currentTime + 10;
-                            if (isLooping && newTime > loopEnd) {
+                            let newTime = player1.currentTime + 10;
+                            if (isLooping1 && newTime > loopEnd) {
                                 newTime = loopEnd - 0.1;
                             }
-                            player.currentTime = Math.min(player.duration || Infinity, newTime);
-                            showFeedback(document.getElementById(`feedbackRight${lessonNum}`));
+                            player1.currentTime = Math.min(player1.duration || Infinity, newTime);
+                            showFeedback1(document.getElementById('feedbackRight1'));
                         }
                         // Para área central, el doble toque no hace nada adicional
-                        tapCount = 0;
+                        tapCount1 = 0;
                     }
                 }
                 
-                lastTapTime = now;
+                lastTapTime1 = now;
             }
             
             // Función para mostrar feedback visual
-            function showFeedback(el) {
+            function showFeedback1(el) {
                 el.classList.remove('animate'); 
                 void el.offsetWidth;
                 el.classList.add('animate');
                 setTimeout(() => el.classList.remove('animate'), 500);
             }
             
-            // ============================================
-            // CONFIGURACIÓN DEL REPRODUCTOR
-            // ============================================
-            
-            // Configurar el volumen al máximo cuando el reproductor esté listo
-            player.on('ready', () => {
+            // Configurar eventos del reproductor
+            player1.on('ready', () => {
+                console.log('Lección 1: Reproductor listo');
                 // Asegurar que el sonido esté activado
-                player.volume = 1;
-                player.muted = false;
+                player1.volume = 1;
+                player1.muted = false;
                 
-                if (isLooping) {
-                    player.currentTime = loopStart;
+                if (isLooping1) {
+                    player1.currentTime = loopStart;
                 }
                 
                 // Mostrar banner al inicio (video pausado)
-                showBanner();
+                showBanner1();
             });
             
             // Manejar clic en el botón de reproducción inicial
-            startScreen.addEventListener('click', (e) => {
+            startScreen1.addEventListener('click', (e) => {
                 e.stopPropagation();
+                console.log('Lección 1: Clic en botón de reproducción inicial');
                 
                 // Ocultar inmediatamente el botón para dar feedback visual
-                startScreen.classList.add('hidden');
+                startScreen1.classList.add('hidden');
                 
                 // Asegurar que el sonido esté activado antes de reproducir
-                player.volume = 1;
-                player.muted = false;
+                player1.volume = 1;
+                player1.muted = false;
                 
-                player.play().then(() => {
-                    hasStarted = true;
+                player1.play().then(() => {
+                    console.log('Lección 1: Reproducción exitosa');
+                    hasStarted1 = true;
                     
-                    if (isLooping && player.currentTime < loopStart) {
-                        player.currentTime = loopStart;
+                    if (isLooping1 && player1.currentTime < loopStart) {
+                        player1.currentTime = loopStart;
                     }
                 }).catch(error => {
+                    console.error('Lección 1: Error al reproducir:', error);
                     // Si falla, mostrar el botón de nuevo
-                    startScreen.classList.remove('hidden');
+                    startScreen1.classList.remove('hidden');
                     
                     // Intentar sin muted (ya que muted está en false)
-                    player.play().then(() => {
-                        hasStarted = true;
+                    player1.play().then(() => {
+                        console.log('Lección 1: Reproducción exitosa en segundo intento');
+                        hasStarted1 = true;
                     }).catch(err => {
-                        startScreen.classList.remove('hidden');
+                        console.error('Lección 1: Error en segundo intento:', err);
+                        startScreen1.classList.remove('hidden');
                     });
                 });
             });
             
             // Manejar clic en el botón azul de pausa/reproducción
-            pauseButton.addEventListener('click', (e) => {
+            pauseButton1.addEventListener('click', (e) => {
                 e.stopPropagation();
+                console.log('Lección 1: Clic en botón azul de pausa/reproducción');
                 
                 // Si el video está pausado, reproducir
-                if (player.paused) {
-                    player.play();
+                if (player1.paused) {
+                    player1.play();
                 } else {
                     // Si el video está reproduciéndose, pausar
-                    player.pause();
+                    player1.pause();
                 }
             });
             
             // Event listeners para las áreas táctiles
-            document.getElementById(`touchCenter${lessonNum}`).addEventListener('click', (e) => {
+            touchCenter1.addEventListener('click', (e) => {
                 e.stopPropagation();
-                handleTap('center');
+                handleTap1('center');
             });
             
-            document.getElementById(`touchLeft${lessonNum}`).addEventListener('click', (e) => {
+            touchLeft1.addEventListener('click', (e) => {
                 e.stopPropagation();
-                handleTap('left');
+                handleTap1('left');
             });
             
-            document.getElementById(`touchRight${lessonNum}`).addEventListener('click', (e) => {
+            touchRight1.addEventListener('click', (e) => {
                 e.stopPropagation();
-                handleTap('right');
+                handleTap1('right');
             });
             
             // Escuchar eventos de estado del reproductor
-            player.on('playing', handlePlay);
-            player.on('play', handlePlay);
-            player.on('pause', handlePause);
+            player1.on('playing', handlePlay1);
+            player1.on('play', handlePlay1);
+            player1.on('pause', handlePause1);
             
             // Controlar el bucle durante la reproducción
-            player.on('timeupdate', () => {
-                if (!isLooping || !player.playing) return;
+            player1.on('timeupdate', () => {
+                if (!isLooping1 || !player1.playing) return;
                 
-                if (player.currentTime >= loopEnd) {
-                    player.currentTime = loopStart;
+                if (player1.currentTime >= loopEnd) {
+                    player1.currentTime = loopStart;
                 }
                 
-                if (player.currentTime < loopStart) {
-                    player.currentTime = loopStart;
+                if (player1.currentTime < loopStart) {
+                    player1.currentTime = loopStart;
                 }
             });
             
             // Manejar cuando el video termina
-            player.on('ended', () => {
-                startScreen.classList.remove('hidden');
-                pauseOverlay.classList.remove('visible');
-                showBanner();
+            player1.on('ended', () => {
+                console.log('Lección 1: Video terminado');
+                startScreen1.classList.remove('hidden');
+                pauseOverlay1.classList.remove('visible');
+                showBanner1();
                 
                 // Cambiar icono del botón de pausa a play (triángulo)
-                pauseButton.innerHTML = `
+                pauseButton1.innerHTML = `
                     <svg viewBox="0 0 24 24">
                         <path d="M8 5v14l11-7z"/>
                     </svg>
@@ -819,22 +802,22 @@
             });
             
             // Activar/desactivar bucle al hacer clic en el indicador
-            loopIndicator.addEventListener('click', () => {
-                isLooping = !isLooping;
-                if (isLooping) {
-                    loopIndicator.innerHTML = `
+            loopIndicator1.addEventListener('click', () => {
+                isLooping1 = !isLooping1;
+                if (isLooping1) {
+                    loopIndicator1.innerHTML = `
                         <svg viewBox="0 0 24 24">
                             <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
                         </svg>
                         <span>BUCLE: 30 SEGUNDOS</span>`;
-                    loopIndicator.style.pointerEvents = 'auto';
-                    loopIndicator.style.cursor = 'pointer';
+                    loopIndicator1.style.pointerEvents = 'auto';
+                    loopIndicator1.style.cursor = 'pointer';
                     
-                    if (player.playing && (player.currentTime < loopStart || player.currentTime > loopEnd)) {
-                        player.currentTime = loopStart;
+                    if (player1.playing && (player1.currentTime < loopStart || player1.currentTime > loopEnd)) {
+                        player1.currentTime = loopStart;
                     }
                 } else {
-                    loopIndicator.innerHTML = `
+                    loopIndicator1.innerHTML = `
                         <svg viewBox="0 0 24 24" style="opacity:0.5;">
                             <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
                         </svg>
@@ -842,69 +825,398 @@
                 }
             });
             
-            loopIndicator.style.pointerEvents = 'auto';
-            loopIndicator.style.cursor = 'pointer';
+            loopIndicator1.style.pointerEvents = 'auto';
+            loopIndicator1.style.cursor = 'pointer';
             
             // Asegurarnos de que el video comience en el tiempo correcto
-            player.on('canplay', () => {
-                if (isLooping) {
-                    player.currentTime = loopStart;
+            player1.on('canplay', () => {
+                console.log('Lección 1: Video listo para reproducir');
+                if (isLooping1) {
+                    player1.currentTime = loopStart;
                 }
             });
             
             // Forzar la ocultación del botón si el video ya está reproduciéndose
             setTimeout(() => {
-                if (player.playing && !startScreen.classList.contains('hidden')) {
-                    startScreen.classList.add('hidden');
-                    hasStarted = true;
+                if (player1 && player1.playing && !startScreen1.classList.contains('hidden')) {
+                    console.log('Lección 1: Video ya reproduciéndose, ocultando botón');
+                    startScreen1.classList.add('hidden');
+                    hasStarted1 = true;
                 }
             }, 1000);
-            
-            // Retornar el estado del bucle por si se necesita externamente
-            return { isLooping };
         }
         
         // ============================================
-        // INICIALIZACIÓN DE AMBAS LECCIONES
+        // INICIALIZACIÓN DE LA LECCIÓN 2
         // ============================================
-        
-        // Inicializar el reproductor para la Lección 1
-        const player1 = new Plyr('#player1', {
-            controls: ['play', 'duration'],
-            fullscreen: { enabled: false },
-            autoplay: false,
-            muted: false,
-            volume: 1,
-            ratio: '16:9',
-            youtube: { 
-                noCookie: true, 
-                rel: 0, 
-                modestbranding: 1,
-                playsinline: 1,
-                enablejsapi: 1
+        function initializeLesson2() {
+            // Elementos de la lección 2
+            const startScreen2 = document.getElementById('startScreen2');
+            const pauseOverlay2 = document.getElementById('pauseOverlay2');
+            const pauseButton2 = document.getElementById('pauseButton2');
+            const bannerMaterial2 = document.getElementById('bannerMaterial2');
+            const loopIndicator2 = document.getElementById('loopIndicator2');
+            const touchCenter2 = document.getElementById('touchCenter2');
+            const touchLeft2 = document.getElementById('touchLeft2');
+            const touchRight2 = document.getElementById('touchRight2');
+            
+            let hasStarted2 = false;
+            let bannerHideTimeout2 = null;
+            let isLooping2 = true;
+            
+            // Variables para control de toques
+            let tapCount2 = 0;
+            let tapTimeout2 = null;
+            let lastTapTime2 = 0;
+            let lastTapArea2 = null;
+            
+            // Inicializar reproductor
+            player2 = new Plyr('#player2', {
+                controls: ['play', 'duration'],
+                fullscreen: { enabled: false },
+                autoplay: false,
+                muted: false,
+                volume: 1,
+                ratio: '16:9',
+                youtube: { 
+                    noCookie: true, 
+                    rel: 0, 
+                    modestbranding: 1,
+                    playsinline: 1,
+                    enablejsapi: 1
+                }
+            });
+            
+            // Función para mostrar el banner de recursos
+            function showBanner2() {
+                clearTimeout(bannerHideTimeout2);
+                bannerMaterial2.classList.add('visible');
             }
-        });
-        
-        // Inicializar el reproductor para la Lección 2
-        const player2 = new Plyr('#player2', {
-            controls: ['play', 'duration'],
-            fullscreen: { enabled: false },
-            autoplay: false,
-            muted: false,
-            volume: 1,
-            ratio: '16:9',
-            youtube: { 
-                noCookie: true, 
-                rel: 0, 
-                modestbranding: 1,
-                playsinline: 1,
-                enablejsapi: 1
+            
+            // Función para ocultar el banner de recursos después de 2.5 segundos
+            function hideBannerDelayed2() {
+                clearTimeout(bannerHideTimeout2);
+                bannerHideTimeout2 = setTimeout(() => {
+                    bannerMaterial2.classList.remove('visible');
+                }, 2500);
             }
-        });
+            
+            // Función para manejar la reproducción
+            function handlePlay2() {
+                console.log('Lección 2: Reproduciendo');
+                startScreen2.classList.add('hidden');
+                pauseOverlay2.classList.remove('visible');
+                hasStarted2 = true;
+                
+                // Cambiar icono del botón de pausa a pausa (dos barras)
+                pauseButton2.innerHTML = `
+                    <svg viewBox="0 0 24 24">
+                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                    </svg>
+                `;
+                
+                // Ocultar banner después de 2.5 segundos
+                hideBannerDelayed2();
+            }
+            
+            // Función para manejar la pausa
+            function handlePause2() {
+                console.log('Lección 2: Pausado');
+                // Mostrar overlay de pausa y banner
+                if (hasStarted2 && player2.paused) {
+                    pauseOverlay2.classList.add('visible');
+                    showBanner2();
+                    
+                    // Cambiar icono del botón de pausa a play (triángulo)
+                    pauseButton2.innerHTML = `
+                        <svg viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                    `;
+                    
+                    // También mostrar el overlay de inicio si el video terminó
+                    if (player2.currentTime >= player2.duration - 0.5) {
+                        startScreen2.classList.remove('hidden');
+                    }
+                }
+            }
+            
+            // Función para manejar toques en diferentes áreas
+            function handleTap2(area) {
+                const now = Date.now();
+                const timeSinceLastTap = now - lastTapTime2;
+                
+                // Si es el primer toque o han pasado más de 300ms desde el último toque
+                if (timeSinceLastTap > 300 || lastTapArea2 !== area) {
+                    // Es un toque simple
+                    tapCount2 = 1;
+                    lastTapArea2 = area;
+                    
+                    // Configurar timeout para detectar si es un toque simple
+                    if (tapTimeout2) clearTimeout(tapTimeout2);
+                    tapTimeout2 = setTimeout(() => {
+                        // Es un toque simple
+                        if (area === 'center') {
+                            // Área central: pausar o reproducir
+                            if (player2.playing) {
+                                player2.pause();
+                            } else if (hasStarted2 && player2.paused) {
+                                player2.play();
+                            }
+                        }
+                        // Para áreas laterales, el toque simple no hace nada
+                        tapCount2 = 0;
+                    }, 300);
+                } else {
+                    // Es un segundo toque en menos de 300ms (doble toque)
+                    tapCount2++;
+                    if (tapTimeout2) clearTimeout(tapTimeout2);
+                    
+                    if (tapCount2 === 2) {
+                        // Es un doble toque
+                        if (area === 'left') {
+                            // Doble toque izquierdo: retroceder 10 segundos
+                            let newTime = player2.currentTime - 10;
+                            if (isLooping2 && newTime < loopStart) {
+                                newTime = loopStart;
+                            }
+                            player2.currentTime = Math.max(0, newTime);
+                            showFeedback2(document.getElementById('feedbackLeft2'));
+                        } else if (area === 'right') {
+                            // Doble toque derecho: adelantar 10 segundos
+                            let newTime = player2.currentTime + 10;
+                            if (isLooping2 && newTime > loopEnd) {
+                                newTime = loopEnd - 0.1;
+                            }
+                            player2.currentTime = Math.min(player2.duration || Infinity, newTime);
+                            showFeedback2(document.getElementById('feedbackRight2'));
+                        }
+                        // Para área central, el doble toque no hace nada adicional
+                        tapCount2 = 0;
+                    }
+                }
+                
+                lastTapTime2 = now;
+            }
+            
+            // Función para mostrar feedback visual
+            function showFeedback2(el) {
+                el.classList.remove('animate'); 
+                void el.offsetWidth;
+                el.classList.add('animate');
+                setTimeout(() => el.classList.remove('animate'), 500);
+            }
+            
+            // Configurar eventos del reproductor
+            player2.on('ready', () => {
+                console.log('Lección 2: Reproductor listo');
+                // Asegurar que el sonido esté activado
+                player2.volume = 1;
+                player2.muted = false;
+                
+                if (isLooping2) {
+                    player2.currentTime = loopStart;
+                }
+                
+                // Mostrar banner al inicio (video pausado)
+                showBanner2();
+            });
+            
+            // Manejar clic en el botón de reproducción inicial
+            startScreen2.addEventListener('click', (e) => {
+                e.stopPropagation();
+                console.log('Lección 2: Clic en botón de reproducción inicial');
+                
+                // Ocultar inmediatamente el botón para dar feedback visual
+                startScreen2.classList.add('hidden');
+                
+                // Asegurar que el sonido esté activado antes de reproducir
+                player2.volume = 1;
+                player2.muted = false;
+                
+                player2.play().then(() => {
+                    console.log('Lección 2: Reproducción exitosa');
+                    hasStarted2 = true;
+                    
+                    if (isLooping2 && player2.currentTime < loopStart) {
+                        player2.currentTime = loopStart;
+                    }
+                }).catch(error => {
+                    console.error('Lección 2: Error al reproducir:', error);
+                    // Si falla, mostrar el botón de nuevo
+                    startScreen2.classList.remove('hidden');
+                    
+                    // Intentar sin muted (ya que muted está en false)
+                    player2.play().then(() => {
+                        console.log('Lección 2: Reproducción exitosa en segundo intento');
+                        hasStarted2 = true;
+                    }).catch(err => {
+                        console.error('Lección 2: Error en segundo intento:', err);
+                        startScreen2.classList.remove('hidden');
+                    });
+                });
+            });
+            
+            // Manejar clic en el botón azul de pausa/reproducción
+            pauseButton2.addEventListener('click', (e) => {
+                e.stopPropagation();
+                console.log('Lección 2: Clic en botón azul de pausa/reproducción');
+                
+                // Si el video está pausado, reproducir
+                if (player2.paused) {
+                    player2.play();
+                } else {
+                    // Si el video está reproduciéndose, pausar
+                    player2.pause();
+                }
+            });
+            
+            // Event listeners para las áreas táctiles
+            touchCenter2.addEventListener('click', (e) => {
+                e.stopPropagation();
+                handleTap2('center');
+            });
+            
+            touchLeft2.addEventListener('click', (e) => {
+                e.stopPropagation();
+                handleTap2('left');
+            });
+            
+            touchRight2.addEventListener('click', (e) => {
+                e.stopPropagation();
+                handleTap2('right');
+            });
+            
+            // Escuchar eventos de estado del reproductor
+            player2.on('playing', handlePlay2);
+            player2.on('play', handlePlay2);
+            player2.on('pause', handlePause2);
+            
+            // Controlar el bucle durante la reproducción
+            player2.on('timeupdate', () => {
+                if (!isLooping2 || !player2.playing) return;
+                
+                if (player2.currentTime >= loopEnd) {
+                    player2.currentTime = loopStart;
+                }
+                
+                if (player2.currentTime < loopStart) {
+                    player2.currentTime = loopStart;
+                }
+            });
+            
+            // Manejar cuando el video termina
+            player2.on('ended', () => {
+                console.log('Lección 2: Video terminado');
+                startScreen2.classList.remove('hidden');
+                pauseOverlay2.classList.remove('visible');
+                showBanner2();
+                
+                // Cambiar icono del botón de pausa a play (triángulo)
+                pauseButton2.innerHTML = `
+                    <svg viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                `;
+            });
+            
+            // Activar/desactivar bucle al hacer clic en el indicador
+            loopIndicator2.addEventListener('click', () => {
+                isLooping2 = !isLooping2;
+                if (isLooping2) {
+                    loopIndicator2.innerHTML = `
+                        <svg viewBox="0 0 24 24">
+                            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                        </svg>
+                        <span>BUCLE: 30 SEGUNDOS</span>`;
+                    loopIndicator2.style.pointerEvents = 'auto';
+                    loopIndicator2.style.cursor = 'pointer';
+                    
+                    if (player2.playing && (player2.currentTime < loopStart || player2.currentTime > loopEnd)) {
+                        player2.currentTime = loopStart;
+                    }
+                } else {
+                    loopIndicator2.innerHTML = `
+                        <svg viewBox="0 0 24 24" style="opacity:0.5;">
+                            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                        </svg>
+                        <span style="opacity:0.5;">BUCLE DESACTIVADO</span>`;
+                }
+            });
+            
+            loopIndicator2.style.pointerEvents = 'auto';
+            loopIndicator2.style.cursor = 'pointer';
+            
+            // Asegurarnos de que el video comience en el tiempo correcto
+            player2.on('canplay', () => {
+                console.log('Lección 2: Video listo para reproducir');
+                if (isLooping2) {
+                    player2.currentTime = loopStart;
+                }
+            });
+            
+            // Forzar la ocultación del botón si el video ya está reproduciéndose
+            setTimeout(() => {
+                if (player2 && player2.playing && !startScreen2.classList.contains('hidden')) {
+                    console.log('Lección 2: Video ya reproduciéndose, ocultando botón');
+                    startScreen2.classList.add('hidden');
+                    hasStarted2 = true;
+                }
+            }, 1000);
+        }
         
-        // Inicializar la lógica de interacción para ambas lecciones
-        const lesson1State = initializeLesson(1);
-        const lesson2State = initializeLesson(2);
+        // ============================================
+        // SISTEMA DE NAVEGACIÓN
+        // ============================================
+        function setupNavigation() {
+            const lesson1 = document.getElementById('lesson1');
+            const lesson2 = document.getElementById('lesson2');
+            const nextLesson1Btn = document.getElementById('nextLesson1');
+            const prevLesson2Btn = document.getElementById('prevLesson2');
+            
+            // Función para cambiar entre lecciones
+            function switchLesson(fromLesson, toLesson) {
+                // Detener el video actual si está reproduciéndose
+                if (fromLesson === 'lesson1' && player1 && player1.playing) {
+                    player1.pause();
+                } else if (fromLesson === 'lesson2' && player2 && player2.playing) {
+                    player2.pause();
+                }
+                
+                // Cambiar visibilidad de las lecciones
+                document.getElementById(fromLesson).classList.remove('active');
+                document.getElementById(toLesson).classList.add('active');
+                
+                // Si vamos a la lección 2 y no se ha inicializado, inicializarla
+                if (toLesson === 'lesson2' && !player2) {
+                    initializeLesson2();
+                }
+            }
+            
+            // Event listeners para navegación
+            nextLesson1Btn.addEventListener('click', () => {
+                switchLesson('lesson1', 'lesson2');
+            });
+            
+            prevLesson2Btn.addEventListener('click', () => {
+                switchLesson('lesson2', 'lesson1');
+            });
+        }
+        
+        // ============================================
+        // INICIALIZACIÓN GENERAL
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM cargado, inicializando...');
+            
+            // Inicializar la lección 1
+            initializeLesson1();
+            
+            // Configurar navegación
+            setupNavigation();
+            
+            console.log('Inicialización completa');
+        });
         
     </script>
 </body>
