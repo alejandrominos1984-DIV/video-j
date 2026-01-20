@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Divélun | Japonés Lección 1</title>
+    <title>Divélun | Japonés - Frases para Viajar</title>
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
@@ -51,6 +51,15 @@
                 width: 100%;
                 max-width: 100%;
             }
+        }
+
+        /* --- LECCIONES (MOSTRAR/OCULTAR) --- */
+        .lesson-section {
+            display: none;
+        }
+        
+        .lesson-section.active {
+            display: block;
         }
 
         /* --- VIDEO HERO --- */
@@ -285,19 +294,31 @@
             margin-bottom: 10px; 
             color: white;
         }
-        .next-lesson-btn { 
+        .navigation-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .nav-btn { 
             display: inline-block; 
             background: var(--brand-blue); 
             color: white; 
-            padding: 12px 24px; 
+            padding: 12px 20px; 
             border-radius: 8px; 
             font-weight: 700; 
             text-decoration: none; 
-            margin-top: 15px; 
             font-size: 0.85rem;
-            width: 100%;
+            flex: 1;
             text-align: center;
             box-sizing: border-box;
+            border: none;
+            cursor: pointer;
+        }
+        .nav-btn.prev {
+            background: #2D3748;
+        }
+        .nav-btn.prev:hover {
+            background: #4A5568;
         }
 
         /* --- MEJORAS PARA MÓVIL --- */
@@ -353,8 +374,8 @@
                 padding: 25px 20px;
             }
             
-            .next-lesson-btn {
-                padding: 14px 28px;
+            .nav-btn {
+                padding: 14px 20px;
                 font-size: 0.9rem;
             }
         }
@@ -379,68 +400,481 @@
     <!-- Contenedor principal -->
     <div class="desktop-container">
         <div class="content-wrapper">
-            <div class="hero-video-section">
-                <div class="video-box" id="videoWrapper">
+            
+            <!-- LECCIÓN 1: 50 FRASES PARA VIAJAR -->
+            <div class="lesson-section active" id="lesson1">
+                <div class="hero-video-section">
+                    <div class="video-box" id="videoWrapper1">
 
-                    <!-- Indicador de bucle de 30 segundos -->
-                    <div class="loop-indicator" id="loopIndicator">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
-                        </svg>
-                        <span>BUCLE: 30 SEGUNDOS</span>
-                    </div>
-
-                    <div class="tap-feedback left" id="feedbackLeft"><div class="tap-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/></svg></div></div>
-                    <div class="tap-feedback right" id="feedbackRight"><div class="tap-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg></div></div>
-
-                    <!-- Áreas táctiles invisibles -->
-                    <div class="touch-area left" id="touchLeft"></div>
-                    <div class="touch-area center" id="touchCenter"></div>
-                    <div class="touch-area right" id="touchRight"></div>
-
-                    <!-- Overlay de pausa con botón azul rectangular -->
-                    <div class="pause-overlay" id="pauseOverlay">
-                        <button class="pause-btn" id="pauseButton">
+                        <!-- Indicador de bucle de 30 segundos -->
+                        <div class="loop-indicator" id="loopIndicator1">
                             <svg viewBox="0 0 24 24">
-                                <path d="M8 5v14l11-7z"/>
+                                <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
                             </svg>
-                        </button>
-                    </div>
-
-                    <div class="start-screen-overlay" id="startScreen">
-                        <div class="big-play-btn">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M8 5v14l11-7z"/>
-                            </svg>
+                            <span>BUCLE: 30 SEGUNDOS</span>
                         </div>
-                    </div>
 
-                    <a href="material-japones.pdf" download class="premium-banner" id="bannerMaterial">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                        <span>RECURSOS PDF</span>
-                    </a>
-                    
-                    <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="VKbvx2QU6jw"></div>
+                        <div class="tap-feedback left" id="feedbackLeft1"><div class="tap-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/></svg></div></div>
+                        <div class="tap-feedback right" id="feedbackRight1"><div class="tap-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg></div></div>
+
+                        <!-- Áreas táctiles invisibles -->
+                        <div class="touch-area left" id="touchLeft1"></div>
+                        <div class="touch-area center" id="touchCenter1"></div>
+                        <div class="touch-area right" id="touchRight1"></div>
+
+                        <!-- Overlay de pausa con botón azul rectangular -->
+                        <div class="pause-overlay" id="pauseOverlay1">
+                            <button class="pause-btn" id="pauseButton1">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="start-screen-overlay" id="startScreen1">
+                            <div class="big-play-btn">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <a href="https://drive.google.com/file/d/1Ywu_" target="_blank" class="premium-banner" id="bannerMaterial1">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            <span>RECURSOS PDF</span>
+                        </a>
+                        
+                        <div id="player1" data-plyr-provider="youtube" data-plyr-embed-id="z1zdzd8ff4U"></div>
+                    </div>
+                </div>
+
+                <div class="content-container">
+                    <h1 class="lesson-title">Lección 1: 50 Frases Esenciales para Viajar a Japón</h1>
+                    <p style="line-height: 1.6; color: #CBD5E0; font-size: 0.9rem;">Aprende las frases más importantes para tu viaje a Japón. Usa el doble toque lateral para repasar fragmentos. <strong style="color: var(--brand-blue);">Modo bucle activado: se repite un segmento de 30 segundos.</strong></p>
+                    <div class="navigation-buttons">
+                        <button class="nav-btn prev" disabled>Lección Anterior</button>
+                        <button class="nav-btn next" id="nextLesson1">Siguiente Lección →</button>
+                    </div>
                 </div>
             </div>
 
-            <div class="content-container">
-                <h1 class="lesson-title">Lección 1: Yo soy / No soy</h1>
-                <p style="line-height: 1.6; color: #CBD5E0; font-size: 0.9rem;">Domina la gramática básica del japonés. Usa el doble toque lateral para repasar fragmentos. <strong style="color: var(--brand-blue);">Modo bucle activado: se repite un segmento de 30 segundos.</strong></p>
-                <a href="#" class="next-lesson-btn">Siguiente Lección →</a>
+            <!-- LECCIÓN 2: 25 FRASES IMPRESCINDIBLES -->
+            <div class="lesson-section" id="lesson2">
+                <div class="hero-video-section">
+                    <div class="video-box" id="videoWrapper2">
+
+                        <!-- Indicador de bucle de 30 segundos -->
+                        <div class="loop-indicator" id="loopIndicator2">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                            </svg>
+                            <span>BUCLE: 30 SEGUNDOS</span>
+                        </div>
+
+                        <div class="tap-feedback left" id="feedbackLeft2"><div class="tap-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/></svg></div></div>
+                        <div class="tap-feedback right" id="feedbackRight2"><div class="tap-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg></div></div>
+
+                        <!-- Áreas táctiles invisibles -->
+                        <div class="touch-area left" id="touchLeft2"></div>
+                        <div class="touch-area center" id="touchCenter2"></div>
+                        <div class="touch-area right" id="touchRight2"></div>
+
+                        <!-- Overlay de pausa con botón azul rectangular -->
+                        <div class="pause-overlay" id="pauseOverlay2">
+                            <button class="pause-btn" id="pauseButton2">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="start-screen-overlay" id="startScreen2">
+                            <div class="big-play-btn">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <a href="https://drive.google.com/file/d/1Ywu_" target="_blank" class="premium-banner" id="bannerMaterial2">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            <span>RECURSOS PDF</span>
+                        </a>
+                        
+                        <div id="player2" data-plyr-provider="youtube" data-plyr-embed-id="_f-ICIgfJ0c"></div>
+                    </div>
+                </div>
+
+                <div class="content-container">
+                    <h1 class="lesson-title">Lección 2: 25 Frases Imprescindibles al Viajar a Japón</h1>
+                    <p style="line-height: 1.6; color: #CBD5E0; font-size: 0.9rem;">Domina las frases más utilizadas al viajar a Japón. Usa el doble toque lateral para repasar fragmentos. <strong style="color: var(--brand-blue);">Modo bucle activado: se repite un segmento de 30 segundos.</strong></p>
+                    <div class="navigation-buttons">
+                        <button class="nav-btn prev" id="prevLesson2">← Lección Anterior</button>
+                        <button class="nav-btn next" disabled>Siguiente Lección</button>
+                    </div>
+                </div>
             </div>
+            
         </div>
     </div>
 
     <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
     <script>
-        // Inicializar el reproductor con las nuevas configuraciones
-        const player = new Plyr('#player', {
+        // ============================================
+        // CONFIGURACIÓN GENERAL Y NAVEGACIÓN
+        // ============================================
+        
+        // Sistema de navegación entre lecciones
+        const lesson1 = document.getElementById('lesson1');
+        const lesson2 = document.getElementById('lesson2');
+        const nextLesson1Btn = document.getElementById('nextLesson1');
+        const prevLesson2Btn = document.getElementById('prevLesson2');
+        
+        // Función para cambiar entre lecciones
+        function switchLesson(fromLesson, toLesson) {
+            // Detener el video actual si está reproduciéndose
+            if (fromLesson === 'lesson1' && player1 && player1.playing) {
+                player1.pause();
+            } else if (fromLesson === 'lesson2' && player2 && player2.playing) {
+                player2.pause();
+            }
+            
+            // Cambiar visibilidad de las lecciones
+            document.getElementById(fromLesson).classList.remove('active');
+            document.getElementById(toLesson).classList.add('active');
+            
+            // Reiniciar el banner para la nueva lección
+            if (toLesson === 'lesson1') {
+                showBanner('lesson1');
+            } else if (toLesson === 'lesson2') {
+                showBanner('lesson2');
+            }
+        }
+        
+        // Event listeners para navegación
+        nextLesson1Btn.addEventListener('click', () => {
+            switchLesson('lesson1', 'lesson2');
+        });
+        
+        prevLesson2Btn.addEventListener('click', () => {
+            switchLesson('lesson2', 'lesson1');
+        });
+        
+        // ============================================
+        // FUNCIONES COMUNES PARA AMBAS LECCIONES
+        // ============================================
+        
+        // Configuración del bucle de 30 segundos (común para ambas lecciones)
+        const loopStart = 30;
+        const loopEnd = 60;
+        
+        // Función para inicializar una lección
+        function initializeLesson(lessonNum) {
+            const player = window[`player${lessonNum}`];
+            const startScreen = document.getElementById(`startScreen${lessonNum}`);
+            const pauseOverlay = document.getElementById(`pauseOverlay${lessonNum}`);
+            const pauseButton = document.getElementById(`pauseButton${lessonNum}`);
+            const bannerMaterial = document.getElementById(`bannerMaterial${lessonNum}`);
+            const loopIndicator = document.getElementById(`loopIndicator${lessonNum}`);
+            
+            let hasStarted = false;
+            let bannerHideTimeout = null;
+            let isLooping = true;
+            
+            // Variables para control de toques
+            let tapCount = 0;
+            let tapTimeout = null;
+            let lastTapTime = 0;
+            let lastTapArea = null;
+            
+            // ============================================
+            // FUNCIONES ESPECÍFICAS DE LA LECCIÓN
+            // ============================================
+            
+            // Función para mostrar el banner de recursos
+            function showBanner() {
+                clearTimeout(bannerHideTimeout);
+                bannerMaterial.classList.add('visible');
+            }
+            
+            // Función para ocultar el banner de recursos después de 2.5 segundos
+            function hideBannerDelayed() {
+                clearTimeout(bannerHideTimeout);
+                bannerHideTimeout = setTimeout(() => {
+                    bannerMaterial.classList.remove('visible');
+                }, 2500); // 2.5 segundos
+            }
+            
+            // Función para manejar la reproducción
+            const handlePlay = () => {
+                startScreen.classList.add('hidden');
+                pauseOverlay.classList.remove('visible');
+                hasStarted = true;
+                
+                // Cambiar icono del botón de pausa a pausa (dos barras)
+                pauseButton.innerHTML = `
+                    <svg viewBox="0 0 24 24">
+                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                    </svg>
+                `;
+                
+                // Ocultar banner después de 2.5 segundos
+                hideBannerDelayed();
+            };
+            
+            // Función para manejar la pausa
+            const handlePause = () => {
+                // Mostrar overlay de pausa y banner
+                if (hasStarted && player.paused) {
+                    pauseOverlay.classList.add('visible');
+                    showBanner();
+                    
+                    // Cambiar icono del botón de pausa a play (triángulo)
+                    pauseButton.innerHTML = `
+                        <svg viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                    `;
+                    
+                    // También mostrar el overlay de inicio si el video terminó
+                    if (player.currentTime >= player.duration - 0.5) {
+                        startScreen.classList.remove('hidden');
+                    }
+                }
+            };
+            
+            // Función para manejar toques en diferentes áreas
+            function handleTap(area) {
+                const now = Date.now();
+                const timeSinceLastTap = now - lastTapTime;
+                
+                // Si es el primer toque o han pasado más de 300ms desde el último toque
+                if (timeSinceLastTap > 300 || lastTapArea !== area) {
+                    // Es un toque simple
+                    tapCount = 1;
+                    lastTapArea = area;
+                    
+                    // Configurar timeout para detectar si es un toque simple
+                    if (tapTimeout) clearTimeout(tapTimeout);
+                    tapTimeout = setTimeout(() => {
+                        // Es un toque simple
+                        if (area === 'center') {
+                            // Área central: pausar o reproducir
+                            if (player.playing) {
+                                player.pause();
+                            } else if (hasStarted && player.paused) {
+                                player.play();
+                            }
+                        }
+                        // Para áreas laterales, el toque simple no hace nada
+                        tapCount = 0;
+                    }, 300);
+                } else {
+                    // Es un segundo toque en menos de 300ms (doble toque)
+                    tapCount++;
+                    if (tapTimeout) clearTimeout(tapTimeout);
+                    
+                    if (tapCount === 2) {
+                        // Es un doble toque
+                        if (area === 'left') {
+                            // Doble toque izquierdo: retroceder 10 segundos
+                            let newTime = player.currentTime - 10;
+                            if (isLooping && newTime < loopStart) {
+                                newTime = loopStart;
+                            }
+                            player.currentTime = Math.max(0, newTime);
+                            showFeedback(document.getElementById(`feedbackLeft${lessonNum}`));
+                        } else if (area === 'right') {
+                            // Doble toque derecho: adelantar 10 segundos
+                            let newTime = player.currentTime + 10;
+                            if (isLooping && newTime > loopEnd) {
+                                newTime = loopEnd - 0.1;
+                            }
+                            player.currentTime = Math.min(player.duration || Infinity, newTime);
+                            showFeedback(document.getElementById(`feedbackRight${lessonNum}`));
+                        }
+                        // Para área central, el doble toque no hace nada adicional
+                        tapCount = 0;
+                    }
+                }
+                
+                lastTapTime = now;
+            }
+            
+            // Función para mostrar feedback visual
+            function showFeedback(el) {
+                el.classList.remove('animate'); 
+                void el.offsetWidth;
+                el.classList.add('animate');
+                setTimeout(() => el.classList.remove('animate'), 500);
+            }
+            
+            // ============================================
+            // CONFIGURACIÓN DEL REPRODUCTOR
+            // ============================================
+            
+            // Configurar el volumen al máximo cuando el reproductor esté listo
+            player.on('ready', () => {
+                // Asegurar que el sonido esté activado
+                player.volume = 1;
+                player.muted = false;
+                
+                if (isLooping) {
+                    player.currentTime = loopStart;
+                }
+                
+                // Mostrar banner al inicio (video pausado)
+                showBanner();
+            });
+            
+            // Manejar clic en el botón de reproducción inicial
+            startScreen.addEventListener('click', (e) => {
+                e.stopPropagation();
+                
+                // Ocultar inmediatamente el botón para dar feedback visual
+                startScreen.classList.add('hidden');
+                
+                // Asegurar que el sonido esté activado antes de reproducir
+                player.volume = 1;
+                player.muted = false;
+                
+                player.play().then(() => {
+                    hasStarted = true;
+                    
+                    if (isLooping && player.currentTime < loopStart) {
+                        player.currentTime = loopStart;
+                    }
+                }).catch(error => {
+                    // Si falla, mostrar el botón de nuevo
+                    startScreen.classList.remove('hidden');
+                    
+                    // Intentar sin muted (ya que muted está en false)
+                    player.play().then(() => {
+                        hasStarted = true;
+                    }).catch(err => {
+                        startScreen.classList.remove('hidden');
+                    });
+                });
+            });
+            
+            // Manejar clic en el botón azul de pausa/reproducción
+            pauseButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                
+                // Si el video está pausado, reproducir
+                if (player.paused) {
+                    player.play();
+                } else {
+                    // Si el video está reproduciéndose, pausar
+                    player.pause();
+                }
+            });
+            
+            // Event listeners para las áreas táctiles
+            document.getElementById(`touchCenter${lessonNum}`).addEventListener('click', (e) => {
+                e.stopPropagation();
+                handleTap('center');
+            });
+            
+            document.getElementById(`touchLeft${lessonNum}`).addEventListener('click', (e) => {
+                e.stopPropagation();
+                handleTap('left');
+            });
+            
+            document.getElementById(`touchRight${lessonNum}`).addEventListener('click', (e) => {
+                e.stopPropagation();
+                handleTap('right');
+            });
+            
+            // Escuchar eventos de estado del reproductor
+            player.on('playing', handlePlay);
+            player.on('play', handlePlay);
+            player.on('pause', handlePause);
+            
+            // Controlar el bucle durante la reproducción
+            player.on('timeupdate', () => {
+                if (!isLooping || !player.playing) return;
+                
+                if (player.currentTime >= loopEnd) {
+                    player.currentTime = loopStart;
+                }
+                
+                if (player.currentTime < loopStart) {
+                    player.currentTime = loopStart;
+                }
+            });
+            
+            // Manejar cuando el video termina
+            player.on('ended', () => {
+                startScreen.classList.remove('hidden');
+                pauseOverlay.classList.remove('visible');
+                showBanner();
+                
+                // Cambiar icono del botón de pausa a play (triángulo)
+                pauseButton.innerHTML = `
+                    <svg viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                `;
+            });
+            
+            // Activar/desactivar bucle al hacer clic en el indicador
+            loopIndicator.addEventListener('click', () => {
+                isLooping = !isLooping;
+                if (isLooping) {
+                    loopIndicator.innerHTML = `
+                        <svg viewBox="0 0 24 24">
+                            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                        </svg>
+                        <span>BUCLE: 30 SEGUNDOS</span>`;
+                    loopIndicator.style.pointerEvents = 'auto';
+                    loopIndicator.style.cursor = 'pointer';
+                    
+                    if (player.playing && (player.currentTime < loopStart || player.currentTime > loopEnd)) {
+                        player.currentTime = loopStart;
+                    }
+                } else {
+                    loopIndicator.innerHTML = `
+                        <svg viewBox="0 0 24 24" style="opacity:0.5;">
+                            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                        </svg>
+                        <span style="opacity:0.5;">BUCLE DESACTIVADO</span>`;
+                }
+            });
+            
+            loopIndicator.style.pointerEvents = 'auto';
+            loopIndicator.style.cursor = 'pointer';
+            
+            // Asegurarnos de que el video comience en el tiempo correcto
+            player.on('canplay', () => {
+                if (isLooping) {
+                    player.currentTime = loopStart;
+                }
+            });
+            
+            // Forzar la ocultación del botón si el video ya está reproduciéndose
+            setTimeout(() => {
+                if (player.playing && !startScreen.classList.contains('hidden')) {
+                    startScreen.classList.add('hidden');
+                    hasStarted = true;
+                }
+            }, 1000);
+            
+            // Retornar el estado del bucle por si se necesita externamente
+            return { isLooping };
+        }
+        
+        // ============================================
+        // INICIALIZACIÓN DE AMBAS LECCIONES
+        // ============================================
+        
+        // Inicializar el reproductor para la Lección 1
+        const player1 = new Plyr('#player1', {
             controls: ['play', 'duration'],
-            fullscreen: { enabled: false }, // Desactivar pantalla completa
+            fullscreen: { enabled: false },
             autoplay: false,
-            muted: false, // Sonido siempre activado
-            volume: 1, // Volumen máximo
+            muted: false,
+            volume: 1,
             ratio: '16:9',
             youtube: { 
                 noCookie: true, 
@@ -450,317 +884,28 @@
                 enablejsapi: 1
             }
         });
-
-        const startScreen = document.getElementById('startScreen');
-        const wrapper = document.getElementById('videoWrapper');
-        const loopIndicator = document.getElementById('loopIndicator');
-        const pauseOverlay = document.getElementById('pauseOverlay');
-        const pauseButton = document.getElementById('pauseButton');
-        const bannerMaterial = document.getElementById('bannerMaterial');
-        const touchLeft = document.getElementById('touchLeft');
-        const touchCenter = document.getElementById('touchCenter');
-        const touchRight = document.getElementById('touchRight');
         
-        let hasStarted = false;
-        let bannerHideTimeout = null;
-        
-        // Configuración del bucle de 30 segundos
-        const loopStart = 30;
-        const loopEnd = 60; // Cambiado de 35 a 60 para 30 segundos
-        let isLooping = true;
-        
-        // Variables para control de toques
-        let tapCount = 0;
-        let tapTimeout = null;
-        let lastTapTime = 0;
-        let lastTapArea = null;
-        
-        // Configurar el volumen al máximo cuando el reproductor esté listo
-        player.on('ready', () => {
-            console.log('Reproductor listo');
-            // Asegurar que el sonido esté activado
-            player.volume = 1;
-            player.muted = false;
-            
-            if (isLooping) {
-                player.currentTime = loopStart;
-            }
-            
-            // Mostrar banner al inicio (video pausado)
-            showBanner();
-        });
-
-        // Función para mostrar el banner de recursos
-        function showBanner() {
-            clearTimeout(bannerHideTimeout);
-            bannerMaterial.classList.add('visible');
-        }
-
-        // Función para ocultar el banner de recursos después de 2.5 segundos
-        function hideBannerDelayed() {
-            clearTimeout(bannerHideTimeout);
-            bannerHideTimeout = setTimeout(() => {
-                bannerMaterial.classList.remove('visible');
-            }, 2500); // 2.5 segundos
-        }
-
-        // Función para manejar la reproducción
-        const handlePlay = () => {
-            console.log('Reproduciendo - ocultando botón');
-            startScreen.classList.add('hidden');
-            pauseOverlay.classList.remove('visible');
-            hasStarted = true;
-            
-            // Asegurar que el sonido esté activado
-            player.volume = 1;
-            player.muted = false;
-            
-            // Cambiar icono del botón de pausa a pausa (dos barras)
-            pauseButton.innerHTML = `
-                <svg viewBox="0 0 24 24">
-                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-                </svg>
-            `;
-            
-            // Ocultar banner después de 2.5 segundos
-            hideBannerDelayed();
-        };
-
-        // Función para manejar la pausa
-        const handlePause = () => {
-            console.log('Video pausado');
-            
-            // Mostrar overlay de pausa y banner
-            if (hasStarted && player.paused) {
-                pauseOverlay.classList.add('visible');
-                showBanner();
-                
-                // Cambiar icono del botón de pausa a play (triángulo)
-                pauseButton.innerHTML = `
-                    <svg viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                    </svg>
-                `;
-                
-                // También mostrar el overlay de inicio si el video terminó
-                if (player.currentTime >= player.duration - 0.5) {
-                    startScreen.classList.remove('hidden');
-                }
-            }
-        };
-
-        // Función para manejar toques en diferentes áreas
-        function handleTap(area) {
-            const now = Date.now();
-            const timeSinceLastTap = now - lastTapTime;
-            
-            // Si es el primer toque o han pasado más de 300ms desde el último toque
-            if (timeSinceLastTap > 300 || lastTapArea !== area) {
-                // Es un toque simple
-                tapCount = 1;
-                lastTapArea = area;
-                
-                // Configurar timeout para detectar si es un toque simple
-                if (tapTimeout) clearTimeout(tapTimeout);
-                tapTimeout = setTimeout(() => {
-                    // Es un toque simple
-                    if (area === 'center') {
-                        // Área central: pausar o reproducir
-                        if (player.playing) {
-                            player.pause();
-                        } else if (hasStarted && player.paused) {
-                            player.play();
-                        }
-                    }
-                    // Para áreas laterales, el toque simple no hace nada
-                    tapCount = 0;
-                }, 300);
-            } else {
-                // Es un segundo toque en menos de 300ms (doble toque)
-                tapCount++;
-                if (tapTimeout) clearTimeout(tapTimeout);
-                
-                if (tapCount === 2) {
-                    // Es un doble toque
-                    if (area === 'left') {
-                        // Doble toque izquierdo: retroceder 10 segundos
-                        let newTime = player.currentTime - 10;
-                        if (isLooping && newTime < loopStart) {
-                            newTime = loopStart;
-                        }
-                        player.currentTime = Math.max(0, newTime);
-                        showFeedback(document.getElementById('feedbackLeft'));
-                    } else if (area === 'right') {
-                        // Doble toque derecho: adelantar 10 segundos
-                        let newTime = player.currentTime + 10;
-                        if (isLooping && newTime > loopEnd) {
-                            newTime = loopEnd - 0.1;
-                        }
-                        player.currentTime = Math.min(player.duration || Infinity, newTime);
-                        showFeedback(document.getElementById('feedbackRight'));
-                    }
-                    // Para área central, el doble toque no hace nada adicional
-                    tapCount = 0;
-                }
-            }
-            
-            lastTapTime = now;
-        }
-
-        // Manejar clic en el botón de reproducción inicial
-        startScreen.addEventListener('click', (e) => {
-            e.stopPropagation();
-            console.log('Clic en botón de reproducción inicial');
-            
-            // Ocultar inmediatamente el botón para dar feedback visual
-            startScreen.classList.add('hidden');
-            
-            // Asegurar que el sonido esté activado antes de reproducir
-            player.volume = 1;
-            player.muted = false;
-            
-            player.play().then(() => {
-                console.log('Reproducción exitosa');
-                hasStarted = true;
-                
-                if (isLooping && player.currentTime < loopStart) {
-                    player.currentTime = loopStart;
-                }
-            }).catch(error => {
-                console.error('Error al reproducir:', error);
-                // Si falla, mostrar el botón de nuevo
-                startScreen.classList.remove('hidden');
-                
-                // Intentar sin muted (ya que muted está en false)
-                player.play().then(() => {
-                    console.log('Reproducción exitosa en segundo intento');
-                    hasStarted = true;
-                }).catch(err => {
-                    console.error('Error en segundo intento:', err);
-                    startScreen.classList.remove('hidden');
-                });
-            });
-        });
-
-        // Manejar clic en el botón azul de pausa/reproducción
-        pauseButton.addEventListener('click', (e) => {
-            e.stopPropagation();
-            console.log('Clic en botón azul de pausa/reproducción');
-            
-            // Si el video está pausado, reproducir
-            if (player.paused) {
-                player.play();
-            } else {
-                // Si el video está reproduciéndose, pausar
-                player.pause();
-            }
-        });
-
-        // Event listeners para las áreas táctiles
-        touchCenter.addEventListener('click', (e) => {
-            e.stopPropagation();
-            handleTap('center');
-        });
-
-        touchLeft.addEventListener('click', (e) => {
-            e.stopPropagation();
-            handleTap('left');
-        });
-
-        touchRight.addEventListener('click', (e) => {
-            e.stopPropagation();
-            handleTap('right');
-        });
-
-        // Escuchar eventos de estado del reproductor
-        player.on('playing', handlePlay);
-        
-        player.on('play', () => {
-            console.log('Evento play disparado');
-            handlePlay();
-        });
-
-        player.on('pause', handlePause);
-
-        // Controlar el bucle durante la reproducción
-        player.on('timeupdate', () => {
-            if (!isLooping || !player.playing) return;
-            
-            if (player.currentTime >= loopEnd) {
-                player.currentTime = loopStart;
-            }
-            
-            if (player.currentTime < loopStart) {
-                player.currentTime = loopStart;
-            }
-        });
-
-        // Manejar cuando el video termina
-        player.on('ended', () => {
-            console.log('Video terminado');
-            startScreen.classList.remove('hidden');
-            pauseOverlay.classList.remove('visible');
-            showBanner();
-            
-            // Cambiar icono del botón de pausa a play (triángulo)
-            pauseButton.innerHTML = `
-                <svg viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z"/>
-                </svg>
-            `;
-        });
-
-        // Función para mostrar feedback visual
-        const showFeedback = (el) => {
-            el.classList.remove('animate'); 
-            void el.offsetWidth;
-            el.classList.add('animate');
-            setTimeout(() => el.classList.remove('animate'), 500);
-        };
-        
-        // Activar/desactivar bucle al hacer clic en el indicador
-        loopIndicator.addEventListener('click', () => {
-            isLooping = !isLooping;
-            if (isLooping) {
-                loopIndicator.innerHTML = `
-                    <svg viewBox="0 0 24 24">
-                        <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
-                    </svg>
-                    <span>BUCLE: 30 SEGUNDOS</span>`;
-                loopIndicator.style.pointerEvents = 'auto';
-                loopIndicator.style.cursor = 'pointer';
-                
-                if (player.playing && (player.currentTime < loopStart || player.currentTime > loopEnd)) {
-                    player.currentTime = loopStart;
-                }
-            } else {
-                loopIndicator.innerHTML = `
-                    <svg viewBox="0 0 24 24" style="opacity:0.5;">
-                        <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
-                    </svg>
-                    <span style="opacity:0.5;">BUCLE DESACTIVADO</span>`;
+        // Inicializar el reproductor para la Lección 2
+        const player2 = new Plyr('#player2', {
+            controls: ['play', 'duration'],
+            fullscreen: { enabled: false },
+            autoplay: false,
+            muted: false,
+            volume: 1,
+            ratio: '16:9',
+            youtube: { 
+                noCookie: true, 
+                rel: 0, 
+                modestbranding: 1,
+                playsinline: 1,
+                enablejsapi: 1
             }
         });
         
-        loopIndicator.style.pointerEvents = 'auto';
-        loopIndicator.style.cursor = 'pointer';
+        // Inicializar la lógica de interacción para ambas lecciones
+        const lesson1State = initializeLesson(1);
+        const lesson2State = initializeLesson(2);
         
-        // Asegurarnos de que el video comience en el tiempo correcto
-        player.on('canplay', () => {
-            console.log('Video listo para reproducir');
-            if (isLooping) {
-                player.currentTime = loopStart;
-            }
-        });
-
-        // Forzar la ocultación del botón si el video ya está reproduciéndose
-        setTimeout(() => {
-            if (player.playing && !startScreen.classList.contains('hidden')) {
-                console.log('Video ya reproduciéndose, ocultando botón');
-                startScreen.classList.add('hidden');
-                hasStarted = true;
-            }
-        }, 1000);
     </script>
 </body>
 </html>
