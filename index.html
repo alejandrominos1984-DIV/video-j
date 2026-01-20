@@ -84,6 +84,31 @@
         .tap-feedback.animate { opacity: 1; }
         .tap-feedback.animate .tap-icon { transform: scale(1.1); }
 
+        /* --- ÁREAS DE DOBLE TOQUE --- */
+        .double-tap-area {
+            position: absolute; top: 0; height: 100%; 
+            z-index: 3; /* Debajo del botón de pausa pero encima del video */
+            cursor: pointer;
+        }
+        
+        .double-tap-area.left { 
+            left: 0; 
+            width: 30%; /* Solo el 30% izquierdo para doble toque */
+        }
+        
+        .double-tap-area.right { 
+            right: 0; 
+            width: 30%; /* Solo el 30% derecho para doble toque */
+        }
+        
+        /* Área central para pausa/reproducción */
+        .center-tap-area {
+            position: absolute; top: 0; height: 100%;
+            left: 30%; width: 40%; /* Centro del 40% para pausa */
+            z-index: 2; /* Debajo de las áreas de doble toque */
+            cursor: pointer;
+        }
+
         /* --- BOTÓN INICIO --- */
         .start-screen-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -373,6 +398,13 @@
                     <div class="tap-feedback left" id="feedbackLeft"><div class="tap-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/></svg></div></div>
                     <div class="tap-feedback right" id="feedbackRight"><div class="tap-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg></div></div>
 
+                    <!-- Áreas de doble toque para adelantar/atrasar -->
+                    <div class="double-tap-area left" id="doubleTapLeft"></div>
+                    <div class="double-tap-area right" id="doubleTapRight"></div>
+                    
+                    <!-- Área central para pausa/reproducción -->
+                    <div class="center-tap-area" id="centerTapArea"></div>
+
                     <!-- Overlay de pausa con botón azul rectangular -->
                     <div class="pause-overlay" id="pauseOverlay">
                         <button class="pause-btn" id="pauseButton">
@@ -432,6 +464,10 @@
         const pauseOverlay = document.getElementById('pauseOverlay');
         const pauseButton = document.getElementById('pauseButton');
         const bannerMaterial = document.getElementById('bannerMaterial');
+        const doubleTapLeft = document.getElementById('doubleTapLeft');
+        const doubleTapRight = document.getElementById('doubleTapRight');
+        const centerTapArea = document.getElementById('centerTapArea');
+        
         let lastTapTime = 0;
         let hasStarted = false;
         let bannerHideTimeout = null;
@@ -440,6 +476,11 @@
         const loopStart = 30;
         const loopEnd = 60; // Cambiado de 35 a 60 para 30 segundos
         let isLooping = true;
+        
+        // Variables para control de doble toque
+        let leftLastTapTime = 0;
+        let rightLastTapTime = 0;
+        let centerLastTapTime = 0;
         
         // Configurar el volumen al máximo cuando el reproductor esté listo
         player.on('ready', () => {
@@ -564,19 +605,13 @@
             }
         });
 
-        // Manejar clic en el área del video para pausar/reproducir
-        wrapper.addEventListener('click', (e) => {
-            // Evitar que el doble toque interfiera
+        // Manejar clic en el área central para pausa/reproducción
+        centerTapArea.addEventListener('click', (e) => {
             const now = Date.now();
-            if (now - lastTapTime > 300) { // No es un doble toque
-                // Evitar clics en elementos específicos
-                if (e.target.closest('.plyr__controls') || 
-                    e.target.closest('.premium-banner') || 
-                    e.target.closest('.loop-indicator') ||
-                    e.target.closest('.start-screen-overlay') ||
-                    e.target.closest('.pause-overlay')) {
-                    return;
-                }
+            
+            // Solo si no es un doble toque (más de 300ms entre toques)
+            if (now - centerLastTapTime > 300) {
+                e.stopPropagation();
                 
                 // Si el video está reproduciéndose, pausarlo
                 if (player.playing) {
@@ -586,7 +621,49 @@
                     player.play();
                 }
             }
-            lastTapTime = now;
+            centerLastTapTime = now;
+        });
+
+        // Manejar doble toque en el área izquierda para retroceder 10 segundos
+        doubleTapLeft.addEventListener('click', (e) => {
+            const now = Date.now();
+            
+            // Verificar si es un doble toque (menos de 300ms entre toques)
+            if (now - leftLastTapTime < 300) {
+                e.stopPropagation();
+                
+                let newTime = player.currentTime - 10;
+                if (isLooping && newTime < loopStart) {
+                    newTime = loopStart;
+                }
+                player.currentTime = Math.max(0, newTime);
+                showFeedback(document.getElementById('feedbackLeft'));
+                
+                leftLastTapTime = 0; // Resetear para el próximo doble toque
+            } else {
+                leftLastTapTime = now;
+            }
+        });
+
+        // Manejar doble toque en el área derecha para adelantar 10 segundos
+        doubleTapRight.addEventListener('click', (e) => {
+            const now = Date.now();
+            
+            // Verificar si es un doble toque (menos de 300ms entre toques)
+            if (now - rightLastTapTime < 300) {
+                e.stopPropagation();
+                
+                let newTime = player.currentTime + 10;
+                if (isLooping && newTime > loopEnd) {
+                    newTime = loopEnd - 0.1;
+                }
+                player.currentTime = Math.min(player.duration || Infinity, newTime);
+                showFeedback(document.getElementById('feedbackRight'));
+                
+                rightLastTapTime = 0; // Resetear para el próximo doble toque
+            } else {
+                rightLastTapTime = now;
+            }
         });
 
         // Escuchar eventos de estado del reproductor
@@ -627,47 +704,13 @@
             `;
         });
 
-        // Función para manejar el doble toque (navegación)
-        const handleDoubleAction = (e) => {
-            if (e.target.closest('.plyr__controls') || 
-                e.target.closest('.premium-banner') || 
-                e.target.closest('.loop-indicator') ||
-                e.target.closest('.start-screen-overlay') ||
-                e.target.closest('.pause-overlay')) return;
-                
-            const now = Date.now();
-            if (now - lastTapTime < 300) {
-                e.preventDefault();
-                const rect = wrapper.getBoundingClientRect();
-                const x = (e.clientX || e.changedTouches[0].clientX) - rect.left;
-                if (x < rect.width / 2) { 
-                    let newTime = player.currentTime - 10;
-                    if (isLooping && newTime < loopStart) {
-                        newTime = loopStart;
-                    }
-                    player.currentTime = Math.max(0, newTime);
-                    showFeedback(document.getElementById('feedbackLeft')); 
-                } else { 
-                    let newTime = player.currentTime + 10;
-                    if (isLooping && newTime > loopEnd) {
-                        newTime = loopEnd - 0.1;
-                    }
-                    player.currentTime = Math.min(player.duration || Infinity, newTime);
-                    showFeedback(document.getElementById('feedbackRight')); 
-                }
-            }
-            lastTapTime = now;
-        };
-
+        // Función para mostrar feedback visual
         const showFeedback = (el) => {
             el.classList.remove('animate'); 
             void el.offsetWidth;
             el.classList.add('animate');
             setTimeout(() => el.classList.remove('animate'), 500);
         };
-
-        wrapper.addEventListener('click', handleDoubleAction);
-        wrapper.addEventListener('dblclick', (e) => e.preventDefault(), true);
         
         // Activar/desactivar bucle al hacer clic en el indicador
         loopIndicator.addEventListener('click', () => {
