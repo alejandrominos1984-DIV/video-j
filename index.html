@@ -3,25 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Divélun | Japonés - Frases para Viajar</title>
+    <title>Divélun | Aprende Japonés</title>
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --brand-blue: #0066FF;
-            --brand-dark: #1A202C;
-            --brand-gray: #718096;
-            --plyr-color-main: var(--brand-blue);
+            --primary-color: #4361ee;
+            --primary-light: #eef2ff;
+            --secondary-color: #7209b7;
+            --accent-color: #f72585;
+            --light-bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --border-color: #e2e8f0;
+            --success-color: #10b981;
+            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --plyr-color-main: var(--primary-color);
+            --gradient-primary: linear-gradient(135deg, #4361ee 0%, #3a56d4 100%);
+            --gradient-accent: linear-gradient(135deg, #f72585 0%, #b5179e 100%);
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body { 
             margin: 0; 
             padding: 0; 
-            background: #000000;
+            background: var(--light-bg);
             font-family: 'Inter', sans-serif; 
-            color: white; 
+            color: var(--text-dark);
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
         /* --- CONTENEDOR PARA ESCRITORIO --- */
@@ -31,25 +48,37 @@
                 justify-content: center;
                 align-items: center;
                 min-height: 100vh;
-                background: #000;
+                background: linear-gradient(135deg, #f0f4ff 0%, #f8fafc 100%);
+                padding: 20px;
             }
             
             .content-wrapper {
                 width: 100%;
-                max-width: 360px;
-                background: #000;
-                box-shadow: 0 0 60px rgba(0, 102, 255, 0.2);
+                max-width: 420px;
+                background: var(--card-bg);
+                border-radius: 24px;
+                box-shadow: var(--shadow-medium);
+                overflow: hidden;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+            
+            .content-wrapper:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 15px 40px rgba(67, 97, 238, 0.15);
             }
         }
 
         @media (max-width: 767px) {
             .desktop-container {
                 display: block;
+                background: linear-gradient(135deg, #f0f4ff 0%, #f8fafc 100%);
+                min-height: 100vh;
             }
             
             .content-wrapper {
                 width: 100%;
                 max-width: 100%;
+                background: var(--card-bg);
             }
         }
 
@@ -60,6 +89,68 @@
         
         .lesson-section.active {
             display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* --- ENCABEZADO CON LOGO --- */
+        .app-header {
+            padding: 20px 24px 10px;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+        }
+        
+        .logo-text {
+            font-weight: 800;
+            font-size: 1.4rem;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+        
+        .lesson-counter {
+            background: var(--primary-light);
+            color: var(--primary-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .lesson-counter i {
+            font-size: 0.7rem;
         }
 
         /* --- VIDEO HERO --- */
@@ -67,6 +158,7 @@
             width: 100%; 
             background: #000; 
             position: relative;
+            border-radius: 0;
         }
         
         .video-box { 
@@ -80,18 +172,33 @@
             aspect-ratio: 16/9;
         }
 
-        /* --- FEEDBACK VISUAL --- */
+        /* --- FEEDBACK VISUAL MEJORADO --- */
         .tap-feedback {
             position: absolute; top: 0; height: 100%; width: 50%;
             display: flex; align-items: center; justify-content: center;
-            background: rgba(0, 102, 255, 0.1); opacity: 0; pointer-events: none; z-index: 5;
+            background: rgba(67, 97, 238, 0.15); 
+            opacity: 0; 
+            pointer-events: none; 
+            z-index: 5;
             transition: opacity 0.3s ease;
         }
         .tap-feedback.left { left: 0; border-radius: 0 50% 50% 0; }
         .tap-feedback.right { right: 0; border-radius: 50% 0 0 50%; }
-        .tap-icon { color: white; transform: scale(0.7); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .tap-icon { 
+            color: white; 
+            background: rgba(255, 255, 255, 0.2);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            transform: scale(0.7); 
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
         .tap-feedback.animate { opacity: 1; }
-        .tap-feedback.animate .tap-icon { transform: scale(1.1); }
+        .tap-feedback.animate .tap-icon { transform: scale(1); }
 
         /* --- ÁREAS TÁCTILES --- */
         .touch-area {
@@ -113,12 +220,14 @@
             left: 30%; width: 40%; /* Centro del 40% para pausa */
         }
 
-        /* --- BOTÓN INICIO --- */
+        /* --- BOTÓN INICIO MEJORADO --- */
         .start-screen-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.85);
             display: flex; align-items: center; justify-content: center;
-            z-index: 20; cursor: pointer; transition: opacity 0.3s ease, visibility 0.3s;
+            z-index: 20; cursor: pointer; 
+            transition: opacity 0.3s ease, visibility 0.3s;
+            backdrop-filter: blur(3px);
         }
         
         .start-screen-overlay.hidden { 
@@ -129,34 +238,36 @@
         
         .big-play-btn { 
             width: 80px; 
-            height: 50px; 
-            background: var(--brand-blue); 
+            height: 80px; 
+            background: var(--gradient-primary); 
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            box-shadow: 0 8px 25px rgba(0, 102, 255, 0.5);
-            border-radius: 8px;
+            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.5);
+            border-radius: 50%;
             border: none;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
         }
         
         .big-play-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 12px 30px rgba(0, 102, 255, 0.6);
+            transform: scale(1.1);
+            box-shadow: 0 12px 30px rgba(67, 97, 238, 0.6);
         }
         
-        .big-play-btn svg {
-            width: 20px;
-            height: 20px;
-            fill: white;
+        .big-play-btn i {
+            font-size: 28px;
+            color: white;
+            margin-left: 5px;
         }
 
-        /* --- BOTÓN DE PAUSA (AZUL RECTANGULAR) --- */
+        /* --- BOTÓN DE PAUSA MEJORADO --- */
         .pause-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; align-items: center; justify-content: center;
             z-index: 18; pointer-events: none; opacity: 0;
             transition: opacity 0.3s ease;
+            backdrop-filter: blur(2px);
         }
         
         .pause-overlay.visible { 
@@ -165,16 +276,16 @@
         }
         
         .pause-btn { 
-            width: 70px; 
-            height: 50px; 
-            background: var(--brand-blue); 
+            width: 80px; 
+            height: 80px; 
+            background: var(--gradient-primary); 
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            box-shadow: 0 8px 25px rgba(0, 102, 255, 0.5);
-            border-radius: 8px;
+            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.5);
+            border-radius: 50%;
             border: none;
-            opacity: 0.9;
+            opacity: 0.95;
             cursor: pointer; /* Cambiar cursor a pointer */
             transition: transform 0.2s ease, opacity 0.2s ease;
         }
@@ -184,44 +295,16 @@
             opacity: 1;
         }
         
-        .pause-btn svg {
-            width: 24px;
-            height: 24px;
-            fill: white;
+        .pause-btn i {
+            font-size: 28px;
+            color: white;
         }
 
-        /* --- BANNER DE RECURSOS (AHORA SE MUESTRA/OCULTA) --- */
-        .premium-banner {
-            position: absolute; 
-            bottom: 10px; 
-            right: 10px;
-            background: var(--brand-blue);
-            color: #ffffff;
-            padding: 8px 12px; /* Aumentado de 6px a 8px */
-            display: flex; 
-            align-items: center; 
-            gap: 5px; /* Reducido */
-            text-decoration: none; 
-            z-index: 15; 
-            border-radius: 4px; 
-            opacity: 0; /* Cambiado de 1 a 0 */
-            box-shadow: 0 4px 12px rgba(0, 102, 255, 0.4);
-            font-weight: 800; 
-            font-size: 0.65rem; /* Más pequeño */
-            transition: opacity 0.3s ease;
-            pointer-events: none; /* Deshabilitar clics cuando esté oculto */
-        }
-        
-        .premium-banner.visible {
-            opacity: 1 !important;
-            pointer-events: auto; /* Habilitar clics cuando esté visible */
-        }
-
-        /* --- CONTROLES SIMPLIFICADOS --- */
+        /* --- CONTROLES SIMPLIFICADOS MEJORADOS --- */
         .plyr__controls { 
-            background: linear-gradient(transparent, rgba(0,0,0,0.9)) !important; 
-            padding: 8px 12px !important; 
-            min-height: 40px !important;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8)) !important; 
+            padding: 10px 15px !important; 
+            min-height: 50px !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
@@ -234,11 +317,12 @@
         .plyr__time--duration {
             display: block !important; 
             visibility: visible !important;
-            font-size: 0.7rem !important; 
-            font-weight: 700 !important;
+            font-size: 0.85rem !important; 
+            font-weight: 600 !important;
             color: #ffffff !important;
             margin: 0 !important;
             text-align: center;
+            font-family: 'Inter', sans-serif;
         }
         
         .plyr__time--current { 
@@ -258,67 +342,173 @@
             display: none !important;
         }
 
-        /* --- INDICADOR DE BUCLE --- */
+        /* --- INDICADOR DE BUCLE MEJORADO --- */
         .loop-indicator {
             position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            color: var(--brand-blue);
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 0.65rem;
+            top: 15px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--primary-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
             font-weight: 700;
             z-index: 10;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
             pointer-events: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
-        .loop-indicator svg {
-            width: 12px;
-            height: 12px;
-            fill: var(--brand-blue);
+        .loop-indicator i {
+            font-size: 0.9rem;
+            color: var(--primary-color);
         }
 
-        /* --- CONTENIDO --- */
+        /* --- CONTENIDO MEJORADO --- */
         .content-container { 
-            padding: 20px 15px; 
-            background: #000;
-            color: white;
+            padding: 24px; 
+            background: var(--card-bg);
         }
         .lesson-title { 
-            font-size: 1.2rem; 
+            font-size: 1.5rem; 
             font-weight: 800; 
-            margin-bottom: 10px; 
-            color: white;
+            margin-bottom: 12px; 
+            color: var(--text-dark);
+            line-height: 1.3;
         }
+        
+        .lesson-title span {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .lesson-description {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .feature-item {
+            background: var(--primary-light);
+            padding: 12px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .feature-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+        }
+        
+        .feature-text {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
         .navigation-buttons {
             display: flex;
-            gap: 10px;
-            margin-top: 15px;
+            gap: 12px;
+            margin-top: 20px;
         }
         .nav-btn { 
-            display: inline-block; 
-            background: var(--brand-blue); 
+            display: inline-flex; 
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-primary); 
             color: white; 
-            padding: 12px 20px; 
-            border-radius: 8px; 
+            padding: 14px 24px; 
+            border-radius: 12px; 
             font-weight: 700; 
             text-decoration: none; 
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             flex: 1;
             text-align: center;
             box-sizing: border-box;
             border: none;
             cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
         }
+        
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+        }
+        
         .nav-btn.prev {
-            background: #2D3748;
+            background: var(--light-bg);
+            color: var(--text-dark);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
+        
         .nav-btn.prev:hover {
-            background: #4A5568;
+            background: #f1f5f9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-btn i {
+            margin: 0 5px;
+            font-size: 0.9rem;
+        }
+        
+        .progress-container {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 3px;
+            width: 50%; /* Para la lección 1 */
+            transition: width 0.5s ease;
+        }
+        
+        #lesson2 .progress-fill {
+            width: 100%; /* Para la lección 2 */
         }
 
         /* --- MEJORAS PARA MÓVIL --- */
@@ -333,50 +523,48 @@
             
             .big-play-btn {
                 width: 90px;
-                height: 55px;
+                height: 90px;
             }
             
-            .big-play-btn svg {
-                width: 24px;
-                height: 24px;
+            .big-play-btn i {
+                font-size: 32px;
             }
             
             .pause-btn {
-                width: 80px;
-                height: 55px;
-                cursor: pointer;
+                width: 90px;
+                height: 90px;
             }
             
-            .pause-btn svg {
-                width: 28px;
-                height: 28px;
-            }
-            
-            .premium-banner {
-                bottom: 12px;
-                right: 12px;
-                padding: 9px 14px; /* Aumentado de 7px a 9px */
-                font-size: 0.7rem;
+            .pause-btn i {
+                font-size: 32px;
             }
             
             .loop-indicator {
-                top: 15px;
-                left: 15px;
-                padding: 6px 12px;
-                font-size: 0.7rem;
+                top: 20px;
+                left: 20px;
+                padding: 10px 18px;
+                font-size: 0.8rem;
+            }
+            
+            .app-header {
+                padding: 20px 20px 15px;
             }
             
             .lesson-title {
-                font-size: 1.4rem;
+                font-size: 1.7rem;
             }
             
             .content-container {
-                padding: 25px 20px;
+                padding: 24px 20px;
             }
             
             .nav-btn {
-                padding: 14px 20px;
-                font-size: 0.9rem;
+                padding: 16px 20px;
+                font-size: 1rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -393,6 +581,46 @@
         .plyr__poster {
             background-size: cover !important;
         }
+        
+        /* --- ANIMACIONES --- */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        /* --- ESTILOS DE FOOTER --- */
+        .app-footer {
+            padding: 15px 24px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-light);
+            border-top: 1px solid var(--border-color);
+            background: var(--card-bg);
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+        }
+        
+        .footer-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+        }
+        
+        .footer-link:hover {
+            color: var(--secondary-color);
+        }
     </style>
 </head>
 <body>
@@ -401,120 +629,221 @@
     <div class="desktop-container">
         <div class="content-wrapper">
             
-            <!-- LECCIÓN 1: 50 FRASES PARA VIAJAR -->
+            <!-- Encabezado con logo -->
+            <div class="app-header">
+                <div class="logo-container">
+                    <div class="logo-icon">D</div>
+                    <div class="logo-text">Divélun</div>
+                </div>
+                <div class="lesson-counter" id="lessonCounter">
+                    <i class="fas fa-book-open"></i>
+                    <span>Lección 1 de 2</span>
+                </div>
+            </div>
+            
+            <!-- LECCIÓN 1: NUEVO VIDEO 1 -->
             <div class="lesson-section active" id="lesson1">
                 <div class="hero-video-section">
                     <div class="video-box" id="videoWrapper1">
 
                         <!-- Indicador de bucle de 30 segundos -->
                         <div class="loop-indicator" id="loopIndicator1">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
-                            </svg>
+                            <i class="fas fa-redo"></i>
                             <span>BUCLE: 30 SEGUNDOS</span>
                         </div>
 
-                        <div class="tap-feedback left" id="feedbackLeft1"><div class="tap-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/></svg></div></div>
-                        <div class="tap-feedback right" id="feedbackRight1"><div class="tap-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg></div></div>
+                        <div class="tap-feedback left" id="feedbackLeft1">
+                            <div class="tap-icon">
+                                <i class="fas fa-backward"></i>
+                            </div>
+                        </div>
+                        <div class="tap-feedback right" id="feedbackRight1">
+                            <div class="tap-icon">
+                                <i class="fas fa-forward"></i>
+                            </div>
+                        </div>
 
                         <!-- Áreas táctiles invisibles -->
                         <div class="touch-area left" id="touchLeft1"></div>
                         <div class="touch-area center" id="touchCenter1"></div>
                         <div class="touch-area right" id="touchRight1"></div>
 
-                        <!-- Overlay de pausa con botón azul rectangular -->
+                        <!-- Overlay de pausa con botón azul circular -->
                         <div class="pause-overlay" id="pauseOverlay1">
                             <button class="pause-btn" id="pauseButton1">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M8 5v14l11-7z"/>
-                                </svg>
+                                <i class="fas fa-play"></i>
                             </button>
                         </div>
 
                         <div class="start-screen-overlay" id="startScreen1">
-                            <div class="big-play-btn">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M8 5v14l11-7z"/>
-                                </svg>
-                            </div>
+                            <button class="big-play-btn pulse-animation">
+                                <i class="fas fa-play"></i>
+                            </button>
                         </div>
-
-                        <a href="https://drive.google.com/file/d/1Ywu_" target="_blank" class="premium-banner" id="bannerMaterial1">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                            <span>RECURSOS PDF</span>
-                        </a>
                         
-                        <div id="player1" data-plyr-provider="youtube" data-plyr-embed-id="z1zdzd8ff4U"></div>
+                        <!-- VIDEO 1: https://www.youtube.com/watch?v=dV2sSjh1rlA -->
+                        <div id="player1" data-plyr-provider="youtube" data-plyr-embed-id="dV2sSjh1rlA"></div>
                     </div>
                 </div>
 
                 <div class="content-container">
-                    <h1 class="lesson-title">Lección 1: 50 Frases Esenciales para Viajar a Japón</h1>
-                    <p style="line-height: 1.6; color: #CBD5E0; font-size: 0.9rem;">Aprende las frases más importantes para tu viaje a Japón. Usa el doble toque lateral para repasar fragmentos. <strong style="color: var(--brand-blue);">Modo bucle activado: se repite un segmento de 30 segundos.</strong></p>
+                    <h1 class="lesson-title">Lección 1: <span>Frases Básicas</span></h1>
+                    <p class="lesson-description">Domina las expresiones fundamentales del japonés con esta lección interactiva. Aprende a saludar, presentarte y formular preguntas esenciales.</p>
+                    
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-redo"></i>
+                            </div>
+                            <div class="feature-text">Bucle de 30 segundos</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-hand-point-up"></i>
+                            </div>
+                            <div class="feature-text">Controles táctiles</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-volume-up"></i>
+                            </div>
+                            <div class="feature-text">Audio claro</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="feature-text">A tu propio ritmo</div>
+                        </div>
+                    </div>
+                    
                     <div class="navigation-buttons">
-                        <button class="nav-btn prev" disabled>Lección Anterior</button>
-                        <button class="nav-btn next" id="nextLesson1">Siguiente Lección →</button>
+                        <button class="nav-btn prev" disabled>
+                            <i class="fas fa-arrow-left"></i> Anterior
+                        </button>
+                        <button class="nav-btn next" id="nextLesson1">
+                            Siguiente <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="progress-container">
+                        <div class="progress-text">
+                            <span>Progreso del curso</span>
+                            <span>50%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- LECCIÓN 2: 25 FRASES IMPRESCINDIBLES -->
+            <!-- LECCIÓN 2: NUEVO VIDEO 2 -->
             <div class="lesson-section" id="lesson2">
                 <div class="hero-video-section">
                     <div class="video-box" id="videoWrapper2">
 
                         <!-- Indicador de bucle de 30 segundos -->
                         <div class="loop-indicator" id="loopIndicator2">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
-                            </svg>
+                            <i class="fas fa-redo"></i>
                             <span>BUCLE: 30 SEGUNDOS</span>
                         </div>
 
-                        <div class="tap-feedback left" id="feedbackLeft2"><div class="tap-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/></svg></div></div>
-                        <div class="tap-feedback right" id="feedbackRight2"><div class="tap-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg></div></div>
+                        <div class="tap-feedback left" id="feedbackLeft2">
+                            <div class="tap-icon">
+                                <i class="fas fa-backward"></i>
+                            </div>
+                        </div>
+                        <div class="tap-feedback right" id="feedbackRight2">
+                            <div class="tap-icon">
+                                <i class="fas fa-forward"></i>
+                            </div>
+                        </div>
 
                         <!-- Áreas táctiles invisibles -->
                         <div class="touch-area left" id="touchLeft2"></div>
                         <div class="touch-area center" id="touchCenter2"></div>
                         <div class="touch-area right" id="touchRight2"></div>
 
-                        <!-- Overlay de pausa con botón azul rectangular -->
+                        <!-- Overlay de pausa con botón azul circular -->
                         <div class="pause-overlay" id="pauseOverlay2">
                             <button class="pause-btn" id="pauseButton2">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M8 5v14l11-7z"/>
-                                </svg>
+                                <i class="fas fa-play"></i>
                             </button>
                         </div>
 
                         <div class="start-screen-overlay" id="startScreen2">
-                            <div class="big-play-btn">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M8 5v14l11-7z"/>
-                                </svg>
-                            </div>
+                            <button class="big-play-btn pulse-animation">
+                                <i class="fas fa-play"></i>
+                            </button>
                         </div>
-
-                        <a href="https://drive.google.com/file/d/1Ywu_" target="_blank" class="premium-banner" id="bannerMaterial2">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                            <span>RECURSOS PDF</span>
-                        </a>
                         
-                        <div id="player2" data-plyr-provider="youtube" data-plyr-embed-id="_f-ICIgfJ0c"></div>
+                        <!-- VIDEO 2: https://www.youtube.com/watch?v=XGP45WwQxl8 -->
+                        <div id="player2" data-plyr-provider="youtube" data-plyr-embed-id="XGP45WwQxl8"></div>
                     </div>
                 </div>
 
                 <div class="content-container">
-                    <h1 class="lesson-title">Lección 2: 25 Frases Imprescindibles al Viajar a Japón</h1>
-                    <p style="line-height: 1.6; color: #CBD5E0; font-size: 0.9rem;">Domina las frases más utilizadas al viajar a Japón. Usa el doble toque lateral para repasar fragmentos. <strong style="color: var(--brand-blue);">Modo bucle activado: se repite un segmento de 30 segundos.</strong></p>
+                    <h1 class="lesson-title">Lección 2: <span>Conversación Básica</span></h1>
+                    <p class="lesson-description">Avanza en tu aprendizaje con diálogos prácticos para situaciones cotidianas. Desarrolla tu comprensión auditiva y expresión oral.</p>
+                    
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-redo"></i>
+                            </div>
+                            <div class="feature-text">Bucle de 30 segundos</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-hand-point-up"></i>
+                            </div>
+                            <div class="feature-text">Controles táctiles</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-volume-up"></i>
+                            </div>
+                            <div class="feature-text">Audio claro</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="feature-text">A tu propio ritmo</div>
+                        </div>
+                    </div>
+                    
                     <div class="navigation-buttons">
-                        <button class="nav-btn prev" id="prevLesson2">← Lección Anterior</button>
-                        <button class="nav-btn next" disabled>Siguiente Lección</button>
+                        <button class="nav-btn prev" id="prevLesson2">
+                            <i class="fas fa-arrow-left"></i> Anterior
+                        </button>
+                        <button class="nav-btn next" disabled>
+                            Próximamente <i class="fas fa-lock"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="progress-container">
+                        <div class="progress-text">
+                            <span>Progreso del curso</span>
+                            <span>100%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
                     </div>
                 </div>
             </div>
             
+            <!-- Footer -->
+            <div class="app-footer">
+                <div>© 2023 Divélun - Aprende Japonés Interactivo</div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Inicio</a>
+                    <a href="#" class="footer-link">Lecciones</a>
+                    <a href="#" class="footer-link">Ayuda</a>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -535,14 +864,12 @@
             const startScreen1 = document.getElementById('startScreen1');
             const pauseOverlay1 = document.getElementById('pauseOverlay1');
             const pauseButton1 = document.getElementById('pauseButton1');
-            const bannerMaterial1 = document.getElementById('bannerMaterial1');
             const loopIndicator1 = document.getElementById('loopIndicator1');
             const touchCenter1 = document.getElementById('touchCenter1');
             const touchLeft1 = document.getElementById('touchLeft1');
             const touchRight1 = document.getElementById('touchRight1');
             
             let hasStarted1 = false;
-            let bannerHideTimeout1 = null;
             let isLooping1 = true;
             
             // Variables para control de toques
@@ -568,20 +895,6 @@
                 }
             });
             
-            // Función para mostrar el banner de recursos
-            function showBanner1() {
-                clearTimeout(bannerHideTimeout1);
-                bannerMaterial1.classList.add('visible');
-            }
-            
-            // Función para ocultar el banner de recursos después de 2.5 segundos
-            function hideBannerDelayed1() {
-                clearTimeout(bannerHideTimeout1);
-                bannerHideTimeout1 = setTimeout(() => {
-                    bannerMaterial1.classList.remove('visible');
-                }, 2500);
-            }
-            
             // Función para manejar la reproducción
             function handlePlay1() {
                 console.log('Lección 1: Reproduciendo');
@@ -590,34 +903,23 @@
                 hasStarted1 = true;
                 
                 // Cambiar icono del botón de pausa a pausa (dos barras)
-                pauseButton1.innerHTML = `
-                    <svg viewBox="0 0 24 24">
-                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-                    </svg>
-                `;
-                
-                // Ocultar banner después de 2.5 segundos
-                hideBannerDelayed1();
+                pauseButton1.innerHTML = `<i class="fas fa-pause"></i>`;
             }
             
             // Función para manejar la pausa
             function handlePause1() {
                 console.log('Lección 1: Pausado');
-                // Mostrar overlay de pausa y banner
+                // Mostrar overlay de pausa
                 if (hasStarted1 && player1.paused) {
                     pauseOverlay1.classList.add('visible');
-                    showBanner1();
                     
                     // Cambiar icono del botón de pausa a play (triángulo)
-                    pauseButton1.innerHTML = `
-                        <svg viewBox="0 0 24 24">
-                            <path d="M8 5v14l11-7z"/>
-                        </svg>
-                    `;
+                    pauseButton1.innerHTML = `<i class="fas fa-play"></i>`;
                     
                     // También mostrar el overlay de inicio si el video terminó
                     if (player1.currentTime >= player1.duration - 0.5) {
                         startScreen1.classList.remove('hidden');
+                        pauseButton1.innerHTML = `<i class="fas fa-play"></i>`;
                     }
                 }
             }
@@ -698,13 +1000,10 @@
                 if (isLooping1) {
                     player1.currentTime = loopStart;
                 }
-                
-                // Mostrar banner al inicio (video pausado)
-                showBanner1();
             });
             
             // Manejar clic en el botón de reproducción inicial
-            startScreen1.addEventListener('click', (e) => {
+            startScreen1.querySelector('.big-play-btn').addEventListener('click', (e) => {
                 e.stopPropagation();
                 console.log('Lección 1: Clic en botón de reproducción inicial');
                 
@@ -791,14 +1090,9 @@
                 console.log('Lección 1: Video terminado');
                 startScreen1.classList.remove('hidden');
                 pauseOverlay1.classList.remove('visible');
-                showBanner1();
                 
                 // Cambiar icono del botón de pausa a play (triángulo)
-                pauseButton1.innerHTML = `
-                    <svg viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                    </svg>
-                `;
+                pauseButton1.innerHTML = `<i class="fas fa-play"></i>`;
             });
             
             // Activar/desactivar bucle al hacer clic en el indicador
@@ -806,9 +1100,7 @@
                 isLooping1 = !isLooping1;
                 if (isLooping1) {
                     loopIndicator1.innerHTML = `
-                        <svg viewBox="0 0 24 24">
-                            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
-                        </svg>
+                        <i class="fas fa-redo"></i>
                         <span>BUCLE: 30 SEGUNDOS</span>`;
                     loopIndicator1.style.pointerEvents = 'auto';
                     loopIndicator1.style.cursor = 'pointer';
@@ -818,9 +1110,7 @@
                     }
                 } else {
                     loopIndicator1.innerHTML = `
-                        <svg viewBox="0 0 24 24" style="opacity:0.5;">
-                            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
-                        </svg>
+                        <i class="fas fa-redo" style="opacity:0.5;"></i>
                         <span style="opacity:0.5;">BUCLE DESACTIVADO</span>`;
                 }
             });
@@ -854,14 +1144,12 @@
             const startScreen2 = document.getElementById('startScreen2');
             const pauseOverlay2 = document.getElementById('pauseOverlay2');
             const pauseButton2 = document.getElementById('pauseButton2');
-            const bannerMaterial2 = document.getElementById('bannerMaterial2');
             const loopIndicator2 = document.getElementById('loopIndicator2');
             const touchCenter2 = document.getElementById('touchCenter2');
             const touchLeft2 = document.getElementById('touchLeft2');
             const touchRight2 = document.getElementById('touchRight2');
             
             let hasStarted2 = false;
-            let bannerHideTimeout2 = null;
             let isLooping2 = true;
             
             // Variables para control de toques
@@ -887,20 +1175,6 @@
                 }
             });
             
-            // Función para mostrar el banner de recursos
-            function showBanner2() {
-                clearTimeout(bannerHideTimeout2);
-                bannerMaterial2.classList.add('visible');
-            }
-            
-            // Función para ocultar el banner de recursos después de 2.5 segundos
-            function hideBannerDelayed2() {
-                clearTimeout(bannerHideTimeout2);
-                bannerHideTimeout2 = setTimeout(() => {
-                    bannerMaterial2.classList.remove('visible');
-                }, 2500);
-            }
-            
             // Función para manejar la reproducción
             function handlePlay2() {
                 console.log('Lección 2: Reproduciendo');
@@ -909,34 +1183,23 @@
                 hasStarted2 = true;
                 
                 // Cambiar icono del botón de pausa a pausa (dos barras)
-                pauseButton2.innerHTML = `
-                    <svg viewBox="0 0 24 24">
-                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-                    </svg>
-                `;
-                
-                // Ocultar banner después de 2.5 segundos
-                hideBannerDelayed2();
+                pauseButton2.innerHTML = `<i class="fas fa-pause"></i>`;
             }
             
             // Función para manejar la pausa
             function handlePause2() {
                 console.log('Lección 2: Pausado');
-                // Mostrar overlay de pausa y banner
+                // Mostrar overlay de pausa
                 if (hasStarted2 && player2.paused) {
                     pauseOverlay2.classList.add('visible');
-                    showBanner2();
                     
                     // Cambiar icono del botón de pausa a play (triángulo)
-                    pauseButton2.innerHTML = `
-                        <svg viewBox="0 0 24 24">
-                            <path d="M8 5v14l11-7z"/>
-                        </svg>
-                    `;
+                    pauseButton2.innerHTML = `<i class="fas fa-play"></i>`;
                     
                     // También mostrar el overlay de inicio si el video terminó
                     if (player2.currentTime >= player2.duration - 0.5) {
                         startScreen2.classList.remove('hidden');
+                        pauseButton2.innerHTML = `<i class="fas fa-play"></i>`;
                     }
                 }
             }
@@ -1017,13 +1280,10 @@
                 if (isLooping2) {
                     player2.currentTime = loopStart;
                 }
-                
-                // Mostrar banner al inicio (video pausado)
-                showBanner2();
             });
             
             // Manejar clic en el botón de reproducción inicial
-            startScreen2.addEventListener('click', (e) => {
+            startScreen2.querySelector('.big-play-btn').addEventListener('click', (e) => {
                 e.stopPropagation();
                 console.log('Lección 2: Clic en botón de reproducción inicial');
                 
@@ -1110,14 +1370,9 @@
                 console.log('Lección 2: Video terminado');
                 startScreen2.classList.remove('hidden');
                 pauseOverlay2.classList.remove('visible');
-                showBanner2();
                 
                 // Cambiar icono del botón de pausa a play (triángulo)
-                pauseButton2.innerHTML = `
-                    <svg viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                    </svg>
-                `;
+                pauseButton2.innerHTML = `<i class="fas fa-play"></i>`;
             });
             
             // Activar/desactivar bucle al hacer clic en el indicador
@@ -1125,9 +1380,7 @@
                 isLooping2 = !isLooping2;
                 if (isLooping2) {
                     loopIndicator2.innerHTML = `
-                        <svg viewBox="0 0 24 24">
-                            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
-                        </svg>
+                        <i class="fas fa-redo"></i>
                         <span>BUCLE: 30 SEGUNDOS</span>`;
                     loopIndicator2.style.pointerEvents = 'auto';
                     loopIndicator2.style.cursor = 'pointer';
@@ -1137,9 +1390,7 @@
                     }
                 } else {
                     loopIndicator2.innerHTML = `
-                        <svg viewBox="0 0 24 24" style="opacity:0.5;">
-                            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
-                        </svg>
+                        <i class="fas fa-redo" style="opacity:0.5;"></i>
                         <span style="opacity:0.5;">BUCLE DESACTIVADO</span>`;
                 }
             });
@@ -1166,13 +1417,14 @@
         }
         
         // ============================================
-        // SISTEMA DE NAVEGACIÓN
+        // SISTEMA DE NAVEGACIÓN MEJORADO
         // ============================================
         function setupNavigation() {
             const lesson1 = document.getElementById('lesson1');
             const lesson2 = document.getElementById('lesson2');
             const nextLesson1Btn = document.getElementById('nextLesson1');
             const prevLesson2Btn = document.getElementById('prevLesson2');
+            const lessonCounter = document.getElementById('lessonCounter');
             
             // Función para cambiar entre lecciones
             function switchLesson(fromLesson, toLesson) {
@@ -1186,6 +1438,13 @@
                 // Cambiar visibilidad de las lecciones
                 document.getElementById(fromLesson).classList.remove('active');
                 document.getElementById(toLesson).classList.add('active');
+                
+                // Actualizar contador de lección
+                if (toLesson === 'lesson1') {
+                    lessonCounter.innerHTML = `<i class="fas fa-book-open"></i><span>Lección 1 de 2</span>`;
+                } else if (toLesson === 'lesson2') {
+                    lessonCounter.innerHTML = `<i class="fas fa-book-open"></i><span>Lección 2 de 2</span>`;
+                }
                 
                 // Si vamos a la lección 2 y no se ha inicializado, inicializarla
                 if (toLesson === 'lesson2' && !player2) {
